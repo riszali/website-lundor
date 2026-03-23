@@ -137,6 +137,144 @@
         .cursor-hover-state #magic-orb-cursor::after {
             transform: translateX(3.5px);
         }
+
+        /* ======================================================== */
+        /* --- STYLING CYBER WA BUTTON (INTERACTIVE & CANGGIH) --- */
+        /* ======================================================== */
+        #cyber-wa-wrapper {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9997; /* Di bawah custom cursor */
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            filter: drop-shadow(0 0 10px rgba(249,0,91,0.2));
+        }
+
+        .cyber-wa-panel {
+            background: linear-gradient(90deg, rgba(10,10,20,0.95) 0%, rgba(249,0,91,0.8) 100%);
+            border: 1px solid rgba(249, 0, 91, 0.4);
+            border-right: none;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            border-radius: 24px 0 0 24px;
+            margin-right: -24px; /* Tertumpuk sedikit oleh core (lingkaran) */
+            padding-right: 24px;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+        }
+
+        .cyber-wa-text {
+            color: white;
+            font-family: monospace;
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 0.1em;
+            padding-left: 20px;
+            padding-right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Lampu indikator status berkedip */
+        .cyber-wa-text .blink-dot {
+            width: 6px;
+            height: 6px;
+            background-color: #00ff88; /* Warna hijau matrix/online */
+            border-radius: 50%;
+            animation: pulse-dot 1.5s infinite;
+            box-shadow: 0 0 8px #00ff88;
+        }
+
+        .cyber-wa-core {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #080815;
+            border: 1px solid rgba(249, 0, 91, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            transition: all 0.4s ease;
+        }
+
+        /* Cincin berputar */
+        .cyber-wa-core::before, .cyber-wa-core::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            pointer-events: none;
+        }
+
+        .cyber-wa-core::before {
+            inset: -5px;
+            border: 1px dashed rgba(249, 0, 91, 0.6);
+            animation: spin-right 8s linear infinite;
+        }
+
+        .cyber-wa-core::after {
+            inset: -9px;
+            border: 1px solid transparent;
+            border-left-color: rgba(157, 0, 255, 0.8);
+            border-right-color: rgba(157, 0, 255, 0.8);
+            animation: spin-left 5s linear infinite;
+        }
+
+        /* Ikon Outline Chat Minimalis */
+        .cyber-wa-icon {
+            width: 28px;
+            height: 28px;
+            fill: none;
+            stroke: #fff;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.4s ease;
+        }
+
+        /* State Interaksi Hover/Sentuh */
+        #cyber-wa-wrapper:hover .cyber-wa-core {
+            background: rgba(249, 0, 91, 0.2);
+            box-shadow: 0 0 20px rgba(249,0,91,0.5), inset 0 0 15px rgba(249,0,91,0.5);
+        }
+
+        #cyber-wa-wrapper:hover .cyber-wa-core::before {
+            inset: -7px;
+            border-color: #f9005b;
+        }
+
+        #cyber-wa-wrapper:hover .cyber-wa-core::after {
+            inset: -12px;
+            border-left-color: #9d00ff;
+            border-right-color: #f9005b;
+        }
+
+        #cyber-wa-wrapper:hover .cyber-wa-panel {
+            max-width: 250px;
+            opacity: 1;
+            margin-right: -10px; /* Geser panel ke kiri saat muncul */
+        }
+
+        #cyber-wa-wrapper:hover .cyber-wa-icon {
+            stroke: #f9005b;
+            transform: scale(1.1);
+        }
+
+        /* Animasi */
+        @keyframes spin-right { 100% { transform: rotate(360deg); } }
+        @keyframes spin-left { 100% { transform: rotate(-360deg); } }
+        @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
     </style>
 </head>
 <body class="bg-[#080815] text-gray-100 font-sans antialiased flex flex-col min-h-screen">
@@ -160,6 +298,26 @@
 
         <!-- Memanggil komponen Footer yang dipisah -->
         @include('partials.footer')
+
+        <!-- ============================================== -->
+        <!-- FLOATING CYBER WA BUTTON (CANGGIH & INTERAKTIF) -->
+        <!-- ============================================== -->
+        <a href="https://wa.me/6282110946254" target="_blank" id="cyber-wa-wrapper" title="Hubungi kami via WhatsApp">
+            <!-- Panel Geser (Slide-out) -->
+            <div class="cyber-wa-panel">
+                <span class="cyber-wa-text">
+                    <span class="blink-dot"></span>
+                    CONNECT // WA
+                </span>
+            </div>
+            <!-- Lingkaran Utama (Core) -->
+            <div class="cyber-wa-core">
+                <!-- SVG Icon Minimalis yang terlihat seperti ikon chat/radar -->
+                <svg class="cyber-wa-icon" viewBox="0 0 24 24">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                </svg>
+            </div>
+        </a>
 
     </div>
 
@@ -232,7 +390,8 @@
             animateCursor();
 
             // 3. EFEK INTERAKTIF (HOVER & KLIK)
-            const interactiveElements = document.querySelectorAll('a, button, input, textarea, select, .cursor-pointer');
+            // Tambahkan #cyber-wa-wrapper ke deteksi interaktif agar kursor berubah saat menyentuh tombol WA
+            const interactiveElements = document.querySelectorAll('a, button, input, textarea, select, .cursor-pointer, #cyber-wa-wrapper');
             interactiveElements.forEach(el => {
                 el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover-state'));
                 el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover-state'));

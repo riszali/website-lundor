@@ -36,11 +36,11 @@ function setupStickyOverlay() {
         
         window.ScrollTrigger.create({
             trigger: "#scary-section",
-            start: "top top",           // Mulai mengunci saat sisi atas section menyentuh sisi atas viewport
-            endTrigger: "#city-section",// Kuncian dilepas saat sisi atas city-section...
-            end: "top top",             // ...menyentuh sisi atas viewport (sudah menutupi layar penuh)
-            pin: true,                  // Mengunci (sticky) scary-section
-            pinSpacing: false           // KUNCI UTAMA: menonaktifkan jarak kosong agar city-section bisa menimpa!
+            start: "top top",           
+            endTrigger: "#city-section",
+            end: "top top",             
+            pin: true,                  
+            pinSpacing: false           
         });
     }
 }
@@ -125,7 +125,6 @@ function initScaryScene() {
     window.addEventListener('resize', onWindowResize);
     scarySection.addEventListener('mousemove', onMouseMove);
 
-    // setTimeout(triggerJumpScare, 7000); // <-- BARIS INI DINONAKTIFKAN agar layar tidak berkedip/bergetar penuh
     animate();
 }
 
@@ -279,7 +278,7 @@ function createTwistedTrees() {
 function triggerJumpScare() {
     glitchPass.enabled = true;
     screamSound.currentTime = 0;
-    screamSound.play().catch(e => console.log('Audio autoplay diblokir oleh browser:', e));
+    screamSound.play().catch(e => console.log('Audio autoplay diblokir:', e));
     
     document.body.classList.add('shake');
     svgOverlay.classList.add('scare-active');

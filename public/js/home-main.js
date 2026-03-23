@@ -27,7 +27,20 @@ document.addEventListener("DOMContentLoaded", () => {
         duration: 0.5
     }, 0.2); 
 
-    // --- 2. Script Drag-to-Scroll Slider & Hover Spotlight ---
+    // --- 2. Animasi Glitch Section (Dipindah Ke Atas) ---
+    let glitchTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: "#glitch-section",
+            start: "center center",
+            end: "+=100%",
+            scrub: 1, 
+            pin: true
+        }
+    });
+    glitchTl.to("#boring-state", { opacity: 0, duration: 1, ease: "power2.inOut" });
+    glitchTl.to("#chaos-state", { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, "-=0.5");
+
+    // --- 3. Script Drag-to-Scroll Slider & Hover Spotlight ---
     const slider = document.getElementById('roles-slider');
     let isDown = false;
     let startX;
@@ -61,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
     
-    // --- 3. Script Portaplane 3D (Optimasi Observer) ---
+    // --- 4. Script Portaplane 3D (Optimasi Observer) ---
     let isPortaplaneVisible = false;
     const portaplaneSection = document.getElementById('section-portaplane');
     const portaplaneObserver = new IntersectionObserver((entries) => {
@@ -188,7 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
                                     window.addEventListener('deviceorientation', handleDeviceOrientation); 
                                     isCalibrated = false; 
                                 } else { 
-                                    // User explicitly denied
                                     const pTag = permMsg.querySelector('p');
                                     const originalText = pTag.innerText;
                                     const originalBtnText = reqPermBtn.innerText;
@@ -205,7 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
                                 }
                             }).catch(err => {
                                 console.error("Gyroscope error:", err);
-                                // Modifikasi langsung di dalam DOM sebagai ganti 'alert'
                                 const pTag = permMsg.querySelector('p');
                                 const originalText = pTag.innerText;
                                 const originalBtnText = reqPermBtn.innerText;
@@ -253,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     initPortaplane();
 
-    // --- 4. Animasi Kinetic Typography ---
+    // --- 5. Animasi Kinetic Typography ---
     gsap.to(".marquee-left", { xPercent: -15, ease: "none", scrollTrigger: { trigger: "#kinetic-section", start: "top bottom", end: "bottom top", scrub: 1 }});
     gsap.to(".marquee-right", { xPercent: 15, ease: "none", scrollTrigger: { trigger: "#kinetic-section", start: "top bottom", end: "bottom top", scrub: 1 }});
     gsap.to("#kinetic-section .kinetic-word", {
@@ -261,20 +272,8 @@ document.addEventListener("DOMContentLoaded", () => {
         scrollTrigger: { trigger: "#kinetic-section", start: "top 60%", end: "center center", scrub: 1 }
     });
 
-    // --- 5. Animasi Glitch Section ---
-    let glitchTl = gsap.timeline({
-        scrollTrigger: {
-            trigger: "#glitch-section",
-            start: "center center",
-            end: "+=100%",
-            scrub: 1, 
-            pin: true
-        }
-    });
-    glitchTl.to("#boring-state", { opacity: 0, duration: 1, ease: "power2.inOut" });
-    glitchTl.to("#chaos-state", { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, "-=0.5");
 
-    // --- 5.8: Script Integrasi Lab City 3D ---
+    // --- 6. Script Integrasi Lab City 3D ---
     const initCity3D = () => {
         const container = document.getElementById('city-canvas-wrapper');
         const section = document.getElementById('city-section');
@@ -302,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let createCarPos = true;
         const uSpeed = 0.001;
-        const setcolor = 0xF02050; // Tema Merah Khas City 3D
+        const setcolor = 0xF02050;
 
         scene.background = new THREE.Color(setcolor);
         scene.fog = new THREE.Fog(setcolor, 10, 16);
@@ -468,7 +467,6 @@ document.addEventListener("DOMContentLoaded", () => {
         generateLines();
         initTown();
 
-        // Optimasi Observer: Render saat section ini terlihat
         let isCityVisible = false;
         const cityObserver = new IntersectionObserver((entries) => {
             isCityVisible = entries[0].isIntersecting;
@@ -502,7 +500,6 @@ document.addEventListener("DOMContentLoaded", () => {
         animate();
     };
 
-    // Memanggil fungsi untuk rendering
     initCity3D();
 
     // --- 7. Script The Vibe Configurator ---
@@ -518,35 +515,35 @@ document.addEventListener("DOMContentLoaded", () => {
     vibeSlider.addEventListener('input', (e) => {
         const val = parseInt(e.target.value);
         
-        // Reset properti ke default sebelum menerapkan state khusus untuk mencegah tumpang tindih desain
+        // Reset properti ke default sebelum menerapkan state khusus
         vibeTitle.style.textShadow = 'none';
         vibeTitle.style.letterSpacing = 'normal';
         vibeTitle.style.transform = 'scale(1)';
         ctaHeading.removeAttribute('data-text');
 
         if(val < 33) {
-            // State 1: SAFE / BORING
+            // State 1: SAFE / CORPORATE
             vibeSection.style.backgroundColor = '#f8f9fa';
             vibeSection.style.color = '#333333';
-            vibeTitle.innerText = "We offer standard services.";
+            vibeTitle.innerText = "The Safe Zone.";
             vibeTitle.style.fontFamily = 'sans-serif';
             
             kontakSection.style.backgroundColor = '#e9ecef';
             ctaCard.className = "bg-white rounded-xl p-10 md:p-16 text-center shadow-md relative overflow-hidden border border-gray-200 transition-all duration-500 max-w-4xl mx-auto";
             ctaHeading.className = "text-3xl font-bold text-gray-800 mb-4";
             ctaHeading.style.fontFamily = 'sans-serif';
-            ctaHeading.innerText = "Siap Mewujudkan Ide Digital Anda?";
+            ctaHeading.innerText = "Ready to Start?";
             ctaDesc.className = "text-gray-600 mb-8 font-sans text-base tracking-normal border-none bg-transparent p-0";
-            ctaDesc.innerText = "Hubungi tim ahli kami sekarang untuk mendapatkan konsultasi gratis mengenai kebutuhan digital dan skalabilitas bisnis Anda.";
+            ctaDesc.innerText = "Pendekatan standar yang teruji. Aman, fungsional, dan langsung pada tujuannya. Hubungi kami untuk berkonsultasi.";
             
-            vibeBtn.className = "inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded hover:bg-blue-700 transition-colors shadow-none border-none";
+            vibeBtn.className = "inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded hover:bg-blue-700 transition-colors shadow-none border-none relative z-10";
             vibeBtn.innerText = "Contact Us";
 
         } else if (val < 66) {
-            // State 2: MODERN / ELEGANT
+            // State 2: MODERN / ELEVATED
             vibeSection.style.backgroundColor = '#1a1a2e';
             vibeSection.style.color = '#ffffff';
-            vibeTitle.innerText = "Elevate Your Digital Presence.";
+            vibeTitle.innerText = "Modern & Elevated.";
             vibeTitle.style.fontFamily = "'Lobster', cursive";
             vibeTitle.style.transform = 'scale(1.1)';
             
@@ -554,35 +551,32 @@ document.addEventListener("DOMContentLoaded", () => {
             ctaCard.className = "bg-[#080815] rounded-3xl p-10 md:p-16 text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden border border-white/10 transition-all duration-500 max-w-5xl mx-auto";
             ctaHeading.className = "text-4xl md:text-5xl font-normal text-[#9d00ff] mb-6";
             ctaHeading.style.fontFamily = "'Lobster', cursive";
-            ctaHeading.innerText = "Ready to Innovate?";
+            ctaHeading.innerText = "Elevate Your Presence";
             ctaDesc.className = "text-gray-300 mb-10 text-lg font-sans tracking-normal border-none bg-transparent p-0";
-            ctaDesc.innerText = "Experience seamless design and cutting-edge technology. Let's discuss your next big leap.";
+            ctaDesc.innerText = "Estetika premium dengan interaksi dinamis. Langkah pertama yang elegan untuk menonjol dari kompetitor Anda.";
             
-            vibeBtn.className = "inline-block bg-white text-black font-bold px-10 py-4 rounded-full shadow-lg hover:bg-gray-200 transition-all hover:-translate-y-1 border-none";
+            vibeBtn.className = "inline-block bg-white text-black font-bold px-10 py-4 rounded-full shadow-lg hover:bg-gray-200 transition-all hover:-translate-y-1 border-none relative z-10";
             vibeBtn.innerText = "Start Your Journey";
 
         } else {
-            // State 3: DISRUPT / CHAOS (Desain Poster Garang tapi Canggih)
+            // State 3: DISRUPT / CHAOS 
             vibeSection.style.backgroundColor = '#000000';
             vibeSection.style.color = '#f9005b';
-            vibeTitle.innerText = "LET'S CREATE CHAOS.";
+            vibeTitle.innerText = "PURE DISRUPTION.";
             vibeTitle.style.fontFamily = 'Impact, sans-serif';
             vibeTitle.style.transform = 'scale(1.2) rotate(-2deg)';
             
             kontakSection.style.backgroundColor = '#000000';
             
-            // Menambahkan animasi gradient dan tech overlay agar lebih canggih
             ctaCard.className = "bg-gradient-to-br from-[#f9005b] via-[#9d00ff] to-[#ff0055] animate-gradient-xy tech-pattern-overlay rounded-3xl p-10 md:p-16 text-center shadow-[0_0_80px_rgba(249,0,91,0.6)] relative overflow-hidden transition-all duration-500 max-w-6xl mx-auto border border-white/20";
             
-            // Z-index 10 ditambahkan ke elemen teks agar berada di atas tech-pattern-overlay
             ctaHeading.className = "text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-6 transform -skew-x-6 relative z-10 drop-shadow-2xl";
             ctaHeading.style.fontFamily = 'Impact, sans-serif';
             ctaHeading.innerText = "LET'S CREATE CHAOS";
             
             ctaDesc.className = "text-white font-bold mb-10 text-xl tracking-widest uppercase border-none bg-transparent p-0 shadow-none relative z-10 drop-shadow-md";
-            ctaDesc.innerText = "Standard is dead. Embrace the chaos.";
+            ctaDesc.innerText = "Lupakan aturan main. Kami bangun pengalaman digital radikal yang tak akan bisa diabaikan.";
             
-            // Tombol canggih dengan efek sweep hover
             vibeBtn.className = "group relative inline-flex items-center justify-center bg-[#080815] text-[#f9005b] font-black text-2xl md:text-3xl px-12 py-6 overflow-hidden rounded-2xl transition-all hover:scale-110 shadow-[0_15px_30px_rgba(0,0,0,0.5)] border border-[#f9005b]/30 relative z-10";
             vibeBtn.innerHTML = "<span class='absolute inset-0 w-[120%] h-full bg-[#f9005b] transform -translate-x-full skew-x-12 group-hover:translate-x-[-10%] transition-transform duration-500 ease-out'></span><span class='relative z-10 group-hover:text-black transition-colors duration-300'>I WANT THIS CHAOS</span>";
         }
