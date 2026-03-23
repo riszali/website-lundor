@@ -1,0 +1,162 @@
+/* * Custom Styles & Premium UI untuk Halaman About Us
+ * Lund'or Imagine Digital - INSANE / CHAOS VERSION
+ */
+
+/* ==========================================
+   1. CUSTOM BROWSER SCROLLBAR & SELECTION
+   ========================================== */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #05050a; 
+}
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #f9005b, #9d00ff); 
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #fff;
+}
+
+::selection {
+    background: #f9005b;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.8);
+}
+
+/* ==========================================
+   2. GLOBAL NOISE / FILM GRAIN OVERLAY
+   (Memberikan tekstur premium ala layar Sci-Fi)
+   ========================================== */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+    opacity: 0.04;
+    mix-blend-mode: overlay;
+}
+
+/* ==========================================
+   3. HARDWARE ACCELERATION & TYPOGRAPHY
+   (Persiapan untuk animasi GSAP yang ekstrem)
+   ========================================== */
+.char {
+    /* Wajib untuk efek GSAP Text Splitter */
+    display: inline-block;
+    will-change: transform, opacity;
+    transform-style: preserve-3d;
+}
+
+.gs-reveal-left, .gs-reveal-right, .stat-box {
+    will-change: transform, filter, clip-path;
+    transform-style: preserve-3d;
+}
+
+/* ==========================================
+   4. BACKGROUND ORBS (NEON GLOW)
+   ========================================== */
+.about-orb-container {
+    perspective: 1000px;
+}
+.about-orb {
+    animation: floatOrb 8s ease-in-out infinite alternate;
+    box-shadow: 0 0 100px 50px rgba(249, 0, 91, 0.2);
+}
+.about-orb-2 {
+    animation: floatOrb2 10s ease-in-out infinite alternate;
+    box-shadow: 0 0 100px 50px rgba(157, 0, 255, 0.2);
+}
+
+@keyframes floatOrb {
+    0% { transform: translate(-40px, -24px) scale(1) rotate(0deg); }
+    100% { transform: translate(20px, 40px) scale(1.2) rotate(15deg); }
+}
+
+@keyframes floatOrb2 {
+    0% { transform: translate(40px, 24px) scale(1) rotate(0deg); }
+    100% { transform: translate(-20px, -40px) scale(1.3) rotate(-15deg); }
+}
+
+/* ==========================================
+   5. ULTRA-PREMIUM GLASSMORPHISM (STAT BOXES)
+   ========================================== */
+.stat-box {
+    padding: 2.5rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+    
+    /* Background Multi-layer Gradient untuk kedalaman (depth) */
+    background: linear-gradient(135deg, rgba(20, 20, 30, 0.6) 0%, rgba(8, 8, 15, 0.9) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    
+    /* Border super tipis untuk efek kaca presisi */
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 2rem;
+    
+    /* Shadow tajam */
+    box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.6), 
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Efek Sapuan Kilapan Kaca (Glass Shine Sweep) */
+.stat-box::before {
+    content: ''; 
+    position: absolute; 
+    top: 0; 
+    left: -150%; 
+    width: 50%; 
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent);
+    transform: skewX(-25deg); 
+    transition: 0.7s ease;
+    pointer-events: none;
+}
+
+.stat-box:hover::before { 
+    left: 200%; 
+    transition: 0.7s ease-in-out; 
+}
+
+.stat-box:hover {
+    border-color: rgba(249, 0, 91, 0.4);
+    box-shadow: 
+        0 40px 80px rgba(0, 0, 0, 0.8), 
+        0 0 40px rgba(249, 0, 91, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================
+   6. IMAGE CONTAINERS & REVEALS
+   ========================================== */
+/* Memastikan gambar tetap mulus saat dirotasi 3D oleh JS */
+.gs-reveal-left img, .gs-reveal-right img {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: subpixel-antialiased;
+    transform: translateZ(0);
+}
+
+/* Custom Quote Box Edge */
+.border-l-4 {
+    position: relative;
+    overflow: hidden;
+}
+.border-l-4::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.02));
+    pointer-events: none;
+}
