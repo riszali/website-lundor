@@ -4,10 +4,34 @@
 
 @section('content')
 <!-- Mengambil font khusus dari desain Anda -->
-<link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Space+Grotesk:wght@300;400;700;900&display=swap" rel="stylesheet">
 
 <!-- CSS Khusus -->
 <style>
+    /* Typography & Utilities */
+    .font-space { font-family: 'Space Grotesk', sans-serif; }
+
+    /* Scrollbar Styling untuk iframe */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 8px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #05050a;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #f9005b;
+        border-radius: 4px;
+    }
+
+    /* Animasi Loading Button */
+    @keyframes pulse-fast {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    .loading-pulse {
+        animation: pulse-fast 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
     /* Untuk Canvas Portaplane agar presisi */
     #portaplane-canvas-wrapper canvas,
     #city-canvas-wrapper canvas {
@@ -54,7 +78,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: black;
+        /* BLOK HITAM DIHILANGKAN DI SINI (Ubah black jadi transparent) */
+        background: transparent;
         will-change: clip;
     }
     .glitch-text::before {
@@ -255,29 +280,37 @@
 
 <!-- SECTION 2: THE MANIFESTO (Glitch Section) -->
 <section id="glitch-section" class="relative w-full h-screen bg-white flex items-center justify-center overflow-hidden z-30">
+    <!-- State 1: Boring Agency -->
     <div id="boring-state" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 z-20 will-change-transform px-4 text-center">
         <h2 class="text-3xl md:text-5xl font-sans text-gray-400 font-light mb-4">The Static Brochure.</h2>
         <p class="text-gray-400 font-sans max-w-xl">Teks datar, gambar diam, dan susunan template standar. Sangat aman, dan perlahan menidurkan audiens Anda.</p>
     </div>
     
-    <div id="chaos-state" class="absolute inset-0 flex flex-col items-center justify-center bg-black z-10 opacity-0 transform scale-110 will-change-transform px-4">
-        <div class="glitch-wrapper">
+    <!-- State 2: Chaos / Disrupt DENGAN GAMBAR IMG4.JPG -->
+    <div id="chaos-state" class="absolute inset-0 flex flex-col items-center justify-center z-10 opacity-0 transform scale-110 will-change-transform px-4 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/img4.jpg') }}');">
+        <!-- Overlay gelap agar teks glitch tetap terbaca jelas di atas gambar -->
+        <div class="absolute inset-0 bg-black/70 z-0 pointer-events-none"></div>
+
+        <div class="glitch-wrapper relative z-10">
             <h2 class="glitch-text text-5xl md:text-8xl lg:text-9xl text-center leading-none" data-text="STATIC IS DEAD">STATIC IS DEAD</h2>
         </div>
-        <p class="text-[#f9005b] mt-6 text-xl md:text-2xl font-mono tracking-widest uppercase animate-pulse text-center">Berhenti membuat website yang membosankan.</p>
+        <p class="text-[#f9005b] mt-6 text-xl md:text-2xl font-mono tracking-widest uppercase animate-pulse text-center relative z-10">Berhenti membuat website yang membosankan.</p>
     </div>
 </section>
 
-<!-- SECTION 3: THE CAPABILITIES (Slider Layanan) -->
-<section id="layanan" class="py-24 bg-[#080815] text-white overflow-hidden relative z-30">
+<!-- SECTION 3: THE CAPABILITIES (Slider Layanan) DENGAN GAMBAR IMG5.JPG -->
+<section id="layanan" class="py-24 text-white overflow-hidden relative z-30 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/img5.jpg') }}');">
+    <!-- Overlay Gelap -->
+    <div class="absolute inset-0 bg-black/70 z-0 pointer-events-none"></div>
+
     <div class="absolute top-10 left-[10%] w-[30rem] h-[30rem] bg-[#f9005b]/20 rounded-full blur-[120px] pointer-events-none z-0 transform-gpu"></div>
     <div class="absolute bottom-10 right-[10%] w-[30rem] h-[30rem] bg-[#9d00ff]/20 rounded-full blur-[120px] pointer-events-none z-0 transform-gpu"></div>
 
     <div class="max-w-screen-2xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         <div class="text-left mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-                <h2 class="text-5xl md:text-7xl font-normal mb-2 text-transparent bg-clip-text bg-gradient-to-r from-[#f9005b] to-[#9d00ff] drop-shadow-2xl" style="font-family: 'Lobster', cursive; padding-right: 10px;">Core Capabilities</h2>
-                <p class="text-base text-gray-400 max-w-xl font-sans font-light tracking-wide mt-2">Keahlian teknis dan kreatif kami untuk membangun ekosistem digital yang solid.</p>
+                <h2 class="text-4xl md:text-6xl font-normal mb-4 text-[#f9005b] drop-shadow-lg tracking-wide" style="font-family: 'Lobster', cursive;">Core Capabilities</h2>
+                <p class="text-lg text-gray-300 max-w-2xl font-mono tracking-wide">Keahlian teknis dan kreatif kami untuk membangun ekosistem digital yang solid.</p>
             </div>
             <div class="hidden md:flex gap-2">
                 <span class="text-gray-400 text-xs font-mono tracking-[0.2em] flex items-center gap-3 border border-white/10 bg-white/5 px-4 py-2 rounded-full">
@@ -289,11 +322,12 @@
         
         <div id="roles-slider" class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-16 pt-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] cursor-grab select-none">
             
-            <!-- Card 1: UI/UX -->
+            <!-- Card 1: UI/UX (DESAIN ORIGINAL, TANPA ABU-ABU) -->
             <article class="tech-card snap-center shrink-0 w-[85vw] md:w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden relative group bg-[#0a0a14] border border-white/5 hover:border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.8)] transition-all duration-500 transform-gpu">
                 <div class="absolute inset-[1px] rounded-[2.4rem] border border-white/0 group-hover:border-[#f9005b]/30 pointer-events-none z-20 transition-colors duration-500"></div>
                 <div class="absolute inset-0 z-0">
-                    <img src="https://cdn-front.freepik.com/home/anon-rvmp/professionals/designers.webp" class="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-60 mix-blend-lighten transition-all duration-700" alt="UI/UX BG">
+                    <!-- Efek grayscale dihapus. Opacity ditingkatkan agar berwarna sejak awal -->
+                    <img src="https://cdn-front.freepik.com/home/anon-rvmp/professionals/designers.webp" class="w-full h-full object-cover opacity-70 group-hover:scale-110 group-hover:opacity-100 mix-blend-lighten transition-all duration-700" alt="UI/UX BG">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-[#0a0a14]/80 to-transparent"></div>
                 </div>
                 <div class="absolute top-6 left-6 flex items-center gap-2 z-20 opacity-50 group-hover:opacity-100 transition-opacity">
@@ -307,11 +341,11 @@
                 </div>
             </article>
 
-            <!-- Card 2: Web Dev -->
+            <!-- Card 2: Web Dev (DESAIN ORIGINAL, TANPA ABU-ABU) -->
             <article class="tech-card snap-center shrink-0 w-[85vw] md:w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden relative group bg-[#0a0a14] border border-white/5 hover:border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.8)] transition-all duration-500 transform-gpu">
                 <div class="absolute inset-[1px] rounded-[2.4rem] border border-white/0 group-hover:border-[#9d00ff]/30 pointer-events-none z-20 transition-colors duration-500"></div>
                 <div class="absolute inset-0 z-0">
-                    <img src="https://images.unsplash.com/photo-1669023414162-8b0573b9c6b2?q=80&w=2064&auto=format&fit=crop" class="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-60 mix-blend-lighten transition-all duration-700" alt="Web Dev BG">
+                    <img src="https://images.unsplash.com/photo-1669023414162-8b0573b9c6b2?q=80&w=2064&auto=format&fit=crop" class="w-full h-full object-cover opacity-70 group-hover:scale-110 group-hover:opacity-100 mix-blend-lighten transition-all duration-700" alt="Web Dev BG">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-[#0a0a14]/80 to-transparent"></div>
                 </div>
                 <div class="absolute top-6 left-6 flex items-center gap-2 z-20 opacity-50 group-hover:opacity-100 transition-opacity">
@@ -325,11 +359,11 @@
                 </div>
             </article>
 
-            <!-- Card 3: 3D Assets -->
+            <!-- Card 3: 3D Assets (DESAIN ORIGINAL, TANPA ABU-ABU) -->
             <article class="tech-card snap-center shrink-0 w-[85vw] md:w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden relative group bg-[#0a0a14] border border-white/5 hover:border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.8)] transition-all duration-500 transform-gpu">
                 <div class="absolute inset-[1px] rounded-[2.4rem] border border-white/0 group-hover:border-[#f9005b]/30 pointer-events-none z-20 transition-colors duration-500"></div>
                 <div class="absolute inset-0 z-0">
-                    <img src="https://cdn-front.freepik.com/home/anon-rvmp/professionals/content-creators.webp" class="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-60 mix-blend-lighten transition-all duration-700" alt="3D BG">
+                    <img src="https://cdn-front.freepik.com/home/anon-rvmp/professionals/content-creators.webp" class="w-full h-full object-cover opacity-70 group-hover:scale-110 group-hover:opacity-100 mix-blend-lighten transition-all duration-700" alt="3D BG">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-[#0a0a14]/80 to-transparent"></div>
                 </div>
                 <div class="absolute top-6 left-6 flex items-center gap-2 z-20 opacity-50 group-hover:opacity-100 transition-opacity">
@@ -343,11 +377,11 @@
                 </div>
             </article>
 
-            <!-- Card 4: Campaigns -->
+            <!-- Card 4: Campaigns (DESAIN ORIGINAL, TANPA ABU-ABU) -->
             <article class="tech-card snap-center shrink-0 w-[85vw] md:w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden relative group bg-[#0a0a14] border border-white/5 hover:border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.8)] transition-all duration-500 transform-gpu">
                 <div class="absolute inset-[1px] rounded-[2.4rem] border border-white/0 group-hover:border-[#9d00ff]/30 pointer-events-none z-20 transition-colors duration-500"></div>
                 <div class="absolute inset-0 z-0">
-                    <img src="https://cdn-front.freepik.com/home/anon-rvmp/professionals/marketers.webp" class="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-60 mix-blend-lighten transition-all duration-700" alt="Campaigns BG">
+                    <img src="https://cdn-front.freepik.com/home/anon-rvmp/professionals/marketers.webp" class="w-full h-full object-cover opacity-70 group-hover:scale-110 group-hover:opacity-100 mix-blend-lighten transition-all duration-700" alt="Campaigns BG">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-[#0a0a14]/80 to-transparent"></div>
                 </div>
                 <div class="absolute top-6 left-6 flex items-center gap-2 z-20 opacity-50 group-hover:opacity-100 transition-opacity">
@@ -361,11 +395,11 @@
                 </div>
             </article>
 
-            <!-- Card 5: Brand Direction -->
+            <!-- Card 5: Brand Direction (DESAIN ORIGINAL, TANPA ABU-ABU) -->
             <article class="tech-card snap-center shrink-0 w-[85vw] md:w-[380px] h-[480px] rounded-[2.5rem] overflow-hidden relative group bg-[#0a0a14] border border-white/5 hover:border-white/20 shadow-[0_15px_35px_rgba(0,0,0,0.8)] transition-all duration-500 transform-gpu">
                 <div class="absolute inset-[1px] rounded-[2.4rem] border border-white/0 group-hover:border-[#f9005b]/30 pointer-events-none z-20 transition-colors duration-500"></div>
                 <div class="absolute inset-0 z-0">
-                    <img src="https://cdn-front.freepik.com/home/anon-rvmp/professionals/art-directors.webp" class="w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-60 mix-blend-lighten transition-all duration-700" alt="Brand BG">
+                    <img src="https://cdn-front.freepik.com/home/anon-rvmp/professionals/art-directors.webp" class="w-full h-full object-cover opacity-70 group-hover:scale-110 group-hover:opacity-100 mix-blend-lighten transition-all duration-700" alt="Brand BG">
                     <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a14] via-[#0a0a14]/80 to-transparent"></div>
                 </div>
                 <div class="absolute top-6 left-6 flex items-center gap-2 z-20 opacity-50 group-hover:opacity-100 transition-opacity">
@@ -378,6 +412,7 @@
                     <p class="text-gray-400 mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75 text-sm leading-relaxed min-h-[60px] md:min-h-[80px]">Arahan visual yang memastikan konsistensi dan karakter eksklusif brand di setiap titik sentuh.</p>
                 </div>
             </article>
+
         </div>
     </div>
 </section>
@@ -495,55 +530,78 @@
     </div>
 </section>
 
-<!-- SECTION 5: THE PROOF (Portfolio / Selected Works) -->
-<section id="lab-section" class="py-32 bg-[#05050a] relative z-30 border-t border-white/5">
+<!-- SECTION 5: SELECTED WORKS (GEELY CASE STUDY) -->
+<section id="lab-section" class="py-24 md:py-32 bg-[#080815] relative z-30 border-t border-white/5 overflow-hidden">
     <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-32 bg-[#9d00ff]/20 blur-[100px] pointer-events-none"></div>
+    <div class="absolute top-1/2 left-0 w-1/3 h-full bg-gradient-to-r from-[#0a0a14] to-transparent z-10 pointer-events-none"></div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+    <div class="max-w-[90rem] mx-auto px-6 lg:px-12 relative z-20">
+        
         <div class="text-center mb-24">
             <h2 class="text-5xl md:text-7xl font-normal text-transparent bg-clip-text bg-gradient-to-r from-[#f9005b] to-[#9d00ff] mb-6 tracking-wide drop-shadow-2xl" style="font-family: 'Lobster', cursive; padding-right: 15px;">Selected Works</h2>
             <p class="text-gray-400 text-sm md:text-base font-light tracking-wide max-w-2xl mx-auto">Kumpulan studi kasus di mana estetika visual berpadu dengan presisi teknis untuk memecahkan tantangan bisnis yang nyata.</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            <!-- Project 1 -->
-            <div class="group relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0a0a14] aspect-[4/3] cursor-pointer shadow-2xl">
-                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-80 transition-all duration-700" alt="Data Visualization Project">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                
-                <div class="absolute top-8 left-8 flex gap-2">
-                    <span class="bg-[#f9005b]/20 text-[#f9005b] border border-[#f9005b]/30 px-4 py-1.5 rounded-full text-xs font-mono font-bold backdrop-blur-md shadow-lg">WEB APP</span>
-                    <span class="bg-white/10 text-white border border-white/20 px-4 py-1.5 rounded-full text-xs font-mono font-bold backdrop-blur-md shadow-lg">UI/UX</span>
-                </div>
 
-                <div class="absolute bottom-0 left-0 p-10 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <h3 class="text-4xl font-bold text-white mb-3 tracking-tight drop-shadow-lg">FinTech Dashboard</h3>
-                    <p class="text-gray-300 text-sm max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 font-light leading-relaxed min-h-[60px] md:min-h-[80px]">Menyederhanakan data finansial yang kompleks menjadi antarmuka visual yang bersih, modern, dan fungsional.</p>
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-16">
+            <div class="max-w-2xl">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-gray-700 to-gray-900 font-space">01</span>
+                    <div class="h-[1px] w-20 bg-gray-700"></div>
+                    <span class="font-mono text-[#f9005b] text-sm uppercase tracking-widest">Web Development</span>
+                </div>
+                <img src="{{ asset('assets/images/logo-client/logo-geely.png') }}" alt="Geely Logo" class="h-12 md:h-16 w-auto object-contain mb-8 filter brightness-200">
+                <h2 class="text-4xl md:text-6xl font-black text-white font-space uppercase tracking-tighter mb-4">The Geely <br><span class="text-[#f9005b]">Digital Fleet</span></h2>
+                <p class="text-gray-400 font-light text-lg">
+                    Pengembangan platform otomotif berkinerja tinggi. Kami membangun ekosistem digital Geely untuk regional Fatmawati dan BSD dengan fokus pada interaksi imersif, kecepatan loading, dan konversi test-drive.
+                </p>
+            </div>
+            
+            <div class="flex gap-4">
+                <span class="px-4 py-2 border border-white/10 rounded-full text-xs font-mono text-gray-400 bg-white/5 backdrop-blur-md">Laravel</span>
+                <span class="px-4 py-2 border border-white/10 rounded-full text-xs font-mono text-gray-400 bg-white/5 backdrop-blur-md">UI/UX</span>
+                <span class="px-4 py-2 border border-white/10 rounded-full text-xs font-mono text-gray-400 bg-white/5 backdrop-blur-md">3D Assets</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="portfolio-card relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a14] group shadow-2xl">
+                <div class="absolute top-4 left-4 z-20 flex gap-2">
+                    <span class="px-4 py-1.5 text-xs font-bold font-mono bg-[#f9005b]/20 text-[#f9005b] backdrop-blur-md rounded-full border border-[#f9005b]/30">GEELY FATMAWATI</span>
+                </div>
+                <div class="relative w-full pt-[56.25%] bg-[#080815] overflow-hidden">
+                    <img src="{{ asset('assets/images/2026-03-18 210733.png') }}" alt="Geely Fatmawati Cover" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:opacity-40 transition-all duration-700 ease-in-out z-0">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a14]/60 via-transparent to-transparent z-0 pointer-events-none"></div>
+                    <div class="preview-overlay absolute inset-0 z-10 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <button class="load-iframe-btn flex items-center gap-3 bg-black/50 backdrop-blur-md border border-[#f9005b] text-[#f9005b] px-8 py-3.5 rounded-full font-bold hover:bg-[#f9005b] hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(249,0,91,0.2)] hover:shadow-[0_0_30px_rgba(249,0,91,0.6)] cursor-pointer" data-url="https://geelyfatmawati.id">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            Launch Experience
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Project 2 -->
-            <div class="group relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0a0a14] aspect-[4/3] cursor-pointer shadow-2xl md:translate-y-16">
-                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-40 grayscale group-hover:grayscale-0 group-hover:scale-110 group-hover:opacity-80 transition-all duration-700" alt="E-Commerce Project">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-                
-                <div class="absolute top-8 left-8 flex gap-2">
-                    <span class="bg-[#9d00ff]/20 text-[#9d00ff] border border-[#9d00ff]/30 px-4 py-1.5 rounded-full text-xs font-mono font-bold backdrop-blur-md shadow-lg">E-COMMERCE</span>
-                    <span class="bg-white/10 text-white border border-white/20 px-4 py-1.5 rounded-full text-xs font-mono font-bold backdrop-blur-md shadow-lg">3D WEB</span>
+            <div class="portfolio-card relative rounded-3xl overflow-hidden border border-white/10 bg-[#0a0a14] group shadow-2xl md:translate-y-12">
+                <div class="absolute top-4 left-4 z-20 flex gap-2">
+                    <span class="px-4 py-1.5 text-xs font-bold font-mono bg-[#9d00ff]/20 text-[#9d00ff] backdrop-blur-md rounded-full border border-[#9d00ff]/30">GEELY BSD</span>
                 </div>
-
-                <div class="absolute bottom-0 left-0 p-10 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <h3 class="text-4xl font-bold text-white mb-3 tracking-tight drop-shadow-lg">NeonWave Store</h3>
-                    <p class="text-gray-300 text-sm max-w-md opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100 font-light leading-relaxed min-h-[60px] md:min-h-[80px]">Merancang pengalaman belanja daring imersif yang memadukan fungsionalitas e-commerce dengan interaktivitas 3D.</p>
+                <div class="relative w-full pt-[56.25%] bg-[#080815] overflow-hidden">
+                    <img src="{{ asset('assets/images/2026-03-18 211448.png') }}" alt="Geely BSD Cover" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 group-hover:opacity-40 transition-all duration-700 ease-in-out z-0">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a14]/60 via-transparent to-transparent z-0 pointer-events-none"></div>
+                    <div class="preview-overlay absolute inset-0 z-10 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <button class="load-iframe-btn flex items-center gap-3 bg-black/50 backdrop-blur-md border border-[#9d00ff] text-[#9d00ff] px-8 py-3.5 rounded-full font-bold hover:bg-[#9d00ff] hover:text-white transition-all duration-300 shadow-[0_0_20px_rgba(157,0,255,0.2)] hover:shadow-[0_0_30px_rgba(157,0,255,0.6)] cursor-pointer" data-url="https://geelybsd.id">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                            Launch Experience
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="mt-32 text-center">
-            <button class="inline-flex items-center gap-3 text-white border border-white/20 bg-white/5 backdrop-blur-sm px-8 py-4 rounded-full font-bold hover:bg-white hover:text-black transition-all duration-300 shadow-lg">
+            <a href="{{ url('/portfolio') }}" class="inline-flex items-center gap-3 text-white border border-white/20 bg-white/5 backdrop-blur-sm px-8 py-4 rounded-full font-bold hover:bg-white hover:text-black transition-all duration-300 shadow-lg">
                 View All Projects
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-            </button>
+            </a>
         </div>
     </div>
 </section>
@@ -636,4 +694,75 @@
 </script>
 
 <script type="module" src="{{ asset('js/home-scary.js') }}"></script>
+
+<!-- SCRIPT UNTUK LIVE PREVIEW IFRAME -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Buat elemen Fullscreen Modal satu kali di dalam Body
+        const previewModal = document.createElement('div');
+        previewModal.className = 'fixed inset-0 z-[99999] bg-[#05050a] flex flex-col opacity-0 pointer-events-none transition-opacity duration-500';
+        previewModal.innerHTML = `
+            <div class="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 bg-[#0a0a14] border-b border-white/10 shadow-lg relative z-20">
+                <div class="flex items-center gap-2 md:gap-3 overflow-hidden pr-2">
+                    <span class="w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#f9005b] animate-pulse shrink-0"></span>
+                    <span class="text-white font-mono text-[10px] md:text-sm tracking-widest uppercase truncate" id="modal-title">Live Preview</span>
+                </div>
+                <button id="close-modal-btn" class="flex items-center shrink-0 gap-1.5 md:gap-2 bg-[#f9005b] text-white px-4 md:px-6 py-1.5 md:py-2.5 rounded-full font-bold text-xs md:text-base cursor-pointer hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(249,0,91,0.4)]">
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    <span class="hidden sm:inline">Tutup Preview</span>
+                    <span class="sm:hidden">Tutup</span>
+                </button>
+            </div>
+            <div class="relative flex-1 w-full h-full bg-[#000]">
+                <!-- Loading Spinner -->
+                <div id="modal-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#080815] z-10 transition-opacity duration-300">
+                    <div class="w-12 h-12 border-4 border-white/10 border-t-[#f9005b] rounded-full animate-spin mb-4"></div>
+                    <p class="text-gray-400 font-mono text-sm tracking-widest animate-pulse">Menghubungkan...</p>
+                </div>
+                <!-- Iframe Sebenarnya -->
+                <iframe id="modal-iframe" src="about:blank" class="w-full h-full border-none relative z-0 custom-scrollbar" allow="autoplay; fullscreen"></iframe>
+            </div>
+        `;
+        document.body.appendChild(previewModal);
+
+        const modalTitle = previewModal.querySelector('#modal-title');
+        const modalLoader = previewModal.querySelector('#modal-loader');
+        const modalIframe = previewModal.querySelector('#modal-iframe');
+        const closeModalBtn = previewModal.querySelector('#close-modal-btn');
+
+        // Logika ketika tombol "Live Preview" Website ditekan
+        const loadWebButtons = document.querySelectorAll('.load-iframe-btn');
+        loadWebButtons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const url = this.getAttribute('data-url');
+                openPreviewModal(url, url);
+            });
+        });
+
+        function openPreviewModal(url, title) {
+            modalTitle.innerText = title;
+            modalLoader.style.opacity = '1';
+            modalLoader.style.pointerEvents = 'auto';
+            previewModal.classList.remove('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = 'hidden'; 
+            modalIframe.src = url;
+
+            modalIframe.onload = () => {
+                if (modalIframe.src !== 'about:blank') {
+                    modalLoader.style.opacity = '0';
+                    setTimeout(() => modalLoader.style.pointerEvents = 'none', 300);
+                }
+            };
+        }
+
+        // Logika Tutup Preview
+        closeModalBtn.addEventListener('click', () => {
+            previewModal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = ''; 
+            modalIframe.src = 'about:blank';
+            modalTitle.innerText = 'Live Preview';
+        });
+    });
+</script>
 @endsection
