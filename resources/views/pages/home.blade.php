@@ -435,12 +435,26 @@
     </div>
 </section>
 
+<!-- Text Scary Face (Mobile Only) -->
+<section class="block md:hidden pt-20 pb-8 px-6 bg-black relative z-30 border-t border-white/5">
+    <div class="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#f9005b]/30 bg-[#f9005b]/10 backdrop-blur-md">
+        <span class="text-xs font-mono text-[#f9005b] tracking-widest uppercase">/// 3D Integration</span>
+    </div>
+    <h3 class="text-5xl text-white leading-tight drop-shadow-2xl mb-4" style="font-family: 'Lobster', cursive;">
+        Breaking <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#f9005b] to-[#9d00ff] pr-4">Flat Interfaces</span>
+    </h3>
+    <p class="font-sans text-gray-300 text-sm bg-[#0a0a14]/60 p-5 rounded-3xl border border-white/10 shadow-2xl leading-relaxed font-light">
+        Mendobrak batasan desain 2D. Kami menghadirkan objek kustom dan pengalaman spasial langsung ke dalam peramban web Anda.
+    </p>
+</section>
+
 <!-- Scary Face Demonstration -->
 <section id="scary-section" class="relative w-full h-[60vh] md:h-screen bg-black flex items-center justify-center overflow-hidden z-30 border-t md:border-t-0 border-white/5">
     <div id="scene-container"></div>
     
-    <!-- Overlay Informasi 3D Modeling -->
-    <div class="absolute top-12 left-6 md:top-24 md:left-24 z-20 pointer-events-none">
+    <!-- Overlay Informasi 3D Modeling (Desktop Only) -->
+    <div class="hidden md:block absolute top-12 left-6 md:top-24 md:left-24 z-20 pointer-events-none">
         <div class="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#f9005b]/30 bg-[#f9005b]/10 backdrop-blur-md">
             <span class="text-xs md:text-sm font-mono text-[#f9005b] tracking-widest uppercase">/// 3D Integration</span>
         </div>
@@ -456,7 +470,8 @@
     <!-- Instruksi Interaksi -->
     <div class="absolute bottom-6 md:bottom-10 left-6 md:left-24 z-10 text-xs md:text-sm text-gray-300 font-mono pointer-events-none bg-[#0a0a14]/80 px-5 py-3 rounded-full border border-white/10 flex items-center gap-3 backdrop-blur-md shadow-lg">
         <span class="w-2.5 h-2.5 rounded-full bg-[#f9005b] animate-ping relative"><span class="absolute inset-0 bg-[#f9005b] rounded-full"></span></span>
-        <span>[ INTERACT ] Touch & drag the canvas.</span>
+        <span class="md:hidden">[ INTERACT ] Touch & drag</span>
+        <span class="hidden md:inline">[ INTERACT ] Touch & drag the canvas.</span>
     </div>
 </section>
 
