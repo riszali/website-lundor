@@ -27,7 +27,7 @@
                 
                 <!-- Dropdown Services -->
                 @php 
-                    $isServiceActive = Request::is('web-development') || Request::is('social-media') || Request::is('uiux-design');
+                    $isServiceActive = Request::is('web-development') || Request::is('social-media') || Request::is('uiux-design') || Request::is('animation');
                 @endphp
                 <div class="relative group cursor-pointer flex items-stretch">
                     <a href="{{ url('/#layanan') }}" class="h-full flex items-center font-sans text-[11px] font-bold tracking-[0.2em] {{ $isServiceActive ? 'text-[#f9005b]' : 'text-white' }} group-hover:text-[#f9005b] transition-colors uppercase relative">
@@ -42,8 +42,8 @@
                         <div class="relative z-10 py-3">
                             <a href="{{ url('/web-development') }}" class="block px-6 py-3 text-[10px] font-bold {{ Request::is('web-development') ? 'text-[#f9005b] bg-[#1a1a2e]' : 'text-gray-300' }} hover:bg-[#1a1a2e] hover:text-[#f9005b] uppercase tracking-[0.2em] transition-all duration-300 hover:pl-8">Web Development</a>
                             <a href="{{ url('/social-media') }}" class="block px-6 py-3 text-[10px] font-bold {{ Request::is('social-media') ? 'text-[#f9005b] bg-[#1a1a2e]' : 'text-gray-300' }} hover:bg-[#1a1a2e] hover:text-[#f9005b] uppercase tracking-[0.2em] transition-all duration-300 hover:pl-8">Social Media</a>
-                            <!-- Link Diperbarui ke Halaman UI/UX Baru -->
                             <a href="{{ url('/uiux-design') }}" class="block px-6 py-3 text-[10px] font-bold {{ Request::is('uiux-design') ? 'text-[#f9005b] bg-[#1a1a2e]' : 'text-gray-300' }} hover:bg-[#1a1a2e] hover:text-[#f9005b] uppercase tracking-[0.2em] transition-all duration-300 hover:pl-8">UI/UX Design</a>
+                            <a href="{{ url('/animation') }}" class="block px-6 py-3 text-[10px] font-bold {{ Request::is('animation') ? 'text-[#f9005b] bg-[#1a1a2e]' : 'text-gray-300' }} hover:bg-[#1a1a2e] hover:text-[#f9005b] uppercase tracking-[0.2em] transition-all duration-300 hover:pl-8">2D & 3D Animation</a>
                         </div>
                     </div>
                 </div>
@@ -76,9 +76,10 @@
             <!-- Call to Actions Desktop -->
             <div class="hidden lg:flex items-stretch space-x-8 h-20">
                 <div class="flex items-center">
-                    <a href="{{ url('/contact') }}" class="relative overflow-hidden group font-sans bg-[#f9005b] text-white px-8 py-3.5 rounded-full text-[10px] font-bold tracking-[0.2em] transition-all duration-500 shadow-[0_10px_20px_rgba(249,0,91,0.3)] hover:shadow-[0_15px_30px_rgba(249,0,91,0.5)] hover:-translate-y-1 uppercase">
+                    <!-- DIUBAH: Mengarah ke /login dengan teks Login System -->
+                    <a href="{{ url('/login') }}" class="relative overflow-hidden group font-sans bg-[#f9005b] text-white px-8 py-3.5 rounded-full text-[10px] font-bold tracking-[0.2em] transition-all duration-500 shadow-[0_10px_20px_rgba(249,0,91,0.3)] hover:shadow-[0_15px_30px_rgba(249,0,91,0.5)] hover:-translate-y-1 uppercase">
                         <span class="relative z-10 flex items-center gap-2">
-                            Konsultasi
+                            Login System
                             <svg class="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </span>
                     </a>
@@ -132,11 +133,11 @@
                     </div>
                 </a>
                 
-                <div class="flex gap-2">
-                    <a href="{{ url('/web-development') }}" class="py-2 px-2 rounded-xl {{ Request::is('web-development') ? 'bg-[#9d00ff] text-white border-[#9d00ff]' : 'bg-black/40 border-white/10 text-gray-300' }} text-[9px] font-bold hover:text-white hover:bg-[#9d00ff] hover:border-[#9d00ff] uppercase tracking-widest flex-1 text-center transition-all duration-300">Web Dev</a>
-                    <a href="{{ url('/social-media') }}" class="py-2 px-2 rounded-xl {{ Request::is('social-media') ? 'bg-[#9d00ff] text-white border-[#9d00ff]' : 'bg-black/40 border-white/10 text-gray-300' }} text-[9px] font-bold hover:text-white hover:bg-[#9d00ff] hover:border-[#9d00ff] uppercase tracking-widest flex-1 text-center transition-all duration-300">Sosmed</a>
-                    <!-- Link Diperbarui ke Halaman UI/UX Baru -->
-                    <a href="{{ url('/uiux-design') }}" class="py-2 px-2 rounded-xl {{ Request::is('uiux-design') ? 'bg-[#9d00ff] text-white border-[#9d00ff]' : 'bg-black/40 border-white/10 text-gray-300' }} text-[9px] font-bold hover:text-white hover:bg-[#9d00ff] hover:border-[#9d00ff] uppercase tracking-widest flex-1 text-center transition-all duration-300">UI/UX</a>
+                <div class="grid grid-cols-2 gap-2">
+                    <a href="{{ url('/web-development') }}" class="py-2 px-2 rounded-xl {{ Request::is('web-development') ? 'bg-[#9d00ff] text-white border-[#9d00ff]' : 'bg-black/40 border-white/10 text-gray-300' }} text-[9px] font-bold hover:text-white hover:bg-[#9d00ff] hover:border-[#9d00ff] uppercase tracking-widest text-center transition-all duration-300">Web Dev</a>
+                    <a href="{{ url('/social-media') }}" class="py-2 px-2 rounded-xl {{ Request::is('social-media') ? 'bg-[#9d00ff] text-white border-[#9d00ff]' : 'bg-black/40 border-white/10 text-gray-300' }} text-[9px] font-bold hover:text-white hover:bg-[#9d00ff] hover:border-[#9d00ff] uppercase tracking-widest text-center transition-all duration-300">Sosmed</a>
+                    <a href="{{ url('/uiux-design') }}" class="py-2 px-2 rounded-xl {{ Request::is('uiux-design') ? 'bg-[#9d00ff] text-white border-[#9d00ff]' : 'bg-black/40 border-white/10 text-gray-300' }} text-[9px] font-bold hover:text-white hover:bg-[#9d00ff] hover:border-[#9d00ff] uppercase tracking-widest text-center transition-all duration-300">UI/UX</a>
+                    <a href="{{ url('/animation') }}" class="py-2 px-2 rounded-xl {{ Request::is('animation') ? 'bg-[#9d00ff] text-white border-[#9d00ff]' : 'bg-black/40 border-white/10 text-gray-300' }} text-[9px] font-bold hover:text-white hover:bg-[#9d00ff] hover:border-[#9d00ff] uppercase tracking-widest text-center transition-all duration-300">Animasi</a>
                 </div>
             </div>
         </div>
@@ -174,8 +175,9 @@
 
     <!-- Mobile CTA Bottom -->
     <div id="mobile-menu-footer" class="relative z-10 mt-8 transform translate-y-6 transition-transform duration-500 ease-out delay-150">
-        <a href="{{ url('/contact') }}" class="w-full flex items-center justify-center gap-2 bg-[#f9005b]/90 backdrop-blur-xl border border-[#f9005b]/50 text-white py-3.5 rounded-2xl font-sans text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_4px_15px_rgba(249,0,91,0.3)] hover:shadow-[0_8px_20px_rgba(249,0,91,0.5)] hover:bg-[#f9005b] hover:-translate-y-0.5">
-            Mulai Konsultasi 
+        <!-- DIUBAH: Mengarah ke /login dengan teks System Access -->
+        <a href="{{ url('/login') }}" class="w-full flex items-center justify-center gap-2 bg-[#f9005b]/90 backdrop-blur-xl border border-[#f9005b]/50 text-white py-3.5 rounded-2xl font-sans text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_4px_15px_rgba(249,0,91,0.3)] hover:shadow-[0_8px_20px_rgba(249,0,91,0.5)] hover:bg-[#f9005b] hover:-translate-y-0.5">
+            System Access 
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </a>
     </div>

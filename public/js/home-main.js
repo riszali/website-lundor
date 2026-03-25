@@ -1,6 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     gsap.registerPlugin(ScrollTrigger);
 
+    // Memastikan video langsung terlihat sejak awal halaman dibuka
+    gsap.set("#hero-video", { opacity: 0.6 });
+
     // --- 1. Animasi GSAP Hero Section ---
     let tl = gsap.timeline({
         scrollTrigger: {
