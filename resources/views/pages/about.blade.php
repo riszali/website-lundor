@@ -466,7 +466,7 @@
                     <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#f9005b] to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                     
                     <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#111]">
-                        <img src="{{ asset('assets/images/IMG_004922.jpg') }}" alt="Risz Ali" class="w-full h-full object-cover filter grayscale opacity-70 group-hover:filter-none group-hover:opacity-100 transition-all duration-700">
+                        <img src="{{ asset('assets/images/marsel.jpg') }}" alt="Marcel Reynold" class="w-full h-full object-cover filter grayscale opacity-70 group-hover:filter-none group-hover:opacity-100 transition-all duration-700">
                         <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black via-black/80 to-transparent translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                             <h3 class="text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1" style="font-family: 'Archivo Black', sans-serif;">Marcel Reynold</h3>
                             <p class="text-[#f9005b] font-mono text-[10px] lg:text-xs tracking-widest uppercase">UI/UX Architect</p>
@@ -474,57 +474,6 @@
                     </div>
                 </div>
 
-                <!-- Team Member 5 -->
-                <div class="group relative bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 p-1 overflow-hidden transition-all duration-500 hover:-translate-y-2 gs-reveal-up delay-400">
-                    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#9d00ff] to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    
-                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#111]">
-                        <img src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Neo Anderson" class="w-full h-full object-cover filter grayscale opacity-70 group-hover:filter-none group-hover:opacity-100 transition-all duration-700">
-                        <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black via-black/80 to-transparent translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <h3 class="text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1" style="font-family: 'Archivo Black', sans-serif;">Neo Anderson</h3>
-                            <p class="text-[#9d00ff] font-mono text-[10px] lg:text-xs tracking-widest uppercase">Backend Architect</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Team Member 6 -->
-                <div class="group relative bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 p-1 overflow-hidden transition-all duration-500 hover:-translate-y-2 gs-reveal-up lg:mt-6 xl:mt-0">
-                    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    
-                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#111]">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Trinity" class="w-full h-full object-cover filter grayscale opacity-70 group-hover:filter-none group-hover:opacity-100 transition-all duration-700">
-                        <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black via-black/80 to-transparent translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <h3 class="text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1" style="font-family: 'Archivo Black', sans-serif;">Trinity</h3>
-                            <p class="text-white/60 font-mono text-[10px] lg:text-xs tracking-widest uppercase">Motion Designer</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Team Member 7 -->
-                <div class="group relative bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 p-1 overflow-hidden transition-all duration-500 hover:-translate-y-2 gs-reveal-up delay-100 xl:mt-6">
-                    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#f9005b] to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    
-                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#111]">
-                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Morpheus" class="w-full h-full object-cover filter grayscale opacity-70 group-hover:filter-none group-hover:opacity-100 transition-all duration-700">
-                        <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black via-black/80 to-transparent translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <h3 class="text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1" style="font-family: 'Archivo Black', sans-serif;">Morpheus</h3>
-                            <p class="text-[#f9005b] font-mono text-[10px] lg:text-xs tracking-widest uppercase">Strategy Lead</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Team Member 8 -->
-                <div class="group relative bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 p-1 overflow-hidden transition-all duration-500 hover:-translate-y-2 gs-reveal-up delay-200 lg:mt-6 xl:mt-0">
-                    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#9d00ff] to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    
-                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#111]">
-                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="David Bowman" class="w-full h-full object-cover filter grayscale opacity-70 group-hover:filter-none group-hover:opacity-100 transition-all duration-700">
-                        <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black via-black/80 to-transparent translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <h3 class="text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1" style="font-family: 'Archivo Black', sans-serif;">David Bowman</h3>
-                            <p class="text-[#9d00ff] font-mono text-[10px] lg:text-xs tracking-widest uppercase">Frontend Developer</p>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Team Member 9 -->
                 <div class="group relative bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 p-1 overflow-hidden transition-all duration-500 hover:-translate-y-2 gs-reveal-up delay-300 xl:mt-6">
@@ -535,19 +484,6 @@
                         <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black via-black/80 to-transparent translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                             <h3 class="text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1" style="font-family: 'Archivo Black', sans-serif;">Faisal K</h3>
                             <p class="text-white/60 font-mono text-[10px] lg:text-xs tracking-widest uppercase">Project Manager</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Team Member 10 -->
-                <div class="group relative bg-[#0a0a0f]/80 backdrop-blur-md border border-white/10 p-1 overflow-hidden transition-all duration-500 hover:-translate-y-2 gs-reveal-up delay-400 lg:mt-6 xl:mt-0">
-                    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#f9005b] to-transparent transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
-                    
-                    <div class="relative w-full aspect-[4/5] overflow-hidden bg-[#111]">
-                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Roy Batty" class="w-full h-full object-cover filter grayscale opacity-70 group-hover:filter-none group-hover:opacity-100 transition-all duration-700">
-                        <div class="absolute bottom-0 left-0 w-full p-5 bg-gradient-to-t from-black via-black/80 to-transparent translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                            <h3 class="text-xl lg:text-2xl font-black text-white uppercase tracking-tight mb-1" style="font-family: 'Archivo Black', sans-serif;">Roy Batty</h3>
-                            <p class="text-[#f9005b] font-mono text-[10px] lg:text-xs tracking-widest uppercase">DevOps Engineer</p>
                         </div>
                     </div>
                 </div>
