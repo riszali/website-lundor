@@ -147,42 +147,83 @@
         border-color: #9d00ff;
     }
 
-    /* Support untuk Firefox */
-    .advanced-slider::-moz-range-track {
+    /* 3. Slider Mekanisme Modern GSAP */
+    .slider-viewport {
+        overflow: hidden;
         width: 100%;
-        height: 6px;
-        background: rgba(128, 128, 128, 0.25);
-        border-radius: 10px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        padding: 20px 0;
     }
-    .advanced-slider::-moz-range-thumb {
-        height: 36px;
-        width: 24px;
+    .slider-track {
+        display: flex;
+        gap: 24px;
+        will-change: transform;
+        transition: none; /* Dikelola oleh GSAP */
+    }
+    .btn-nav-slider {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.05);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .btn-nav-slider:hover:not(:disabled) {
+        background: #f9005b;
+        border-color: #f9005b;
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(249,0,91,0.5);
+    }
+    .btn-nav-slider:disabled {
+        opacity: 0.2;
+        cursor: not-allowed;
+        transform: scale(0.9);
+    }
+    /* Progress bar slider */
+    .slider-progress-bg {
+        width: 200px;
+        height: 2px;
+        background: rgba(255,255,255,0.1);
         border-radius: 4px;
-        background: #0a0a14;
-        cursor: grab;
-        box-shadow: 0 0 25px rgba(249, 0, 91, 0.8), inset 0 0 10px rgba(249,0,91,0.5);
-        border: 2px solid #f9005b;
-        background-image: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.3) 2px, rgba(255,255,255,0.3) 4px);
-        background-position: center;
-        background-size: 10px 10px;
-        background-repeat: no-repeat;
+        overflow: hidden;
+        position: relative;
+    }
+    .slider-progress-fill {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 20%;
+        background: #f9005b;
+        box-shadow: 0 0 10px #f9005b;
+        transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
-    /* 3. Tech Card Spotlight & Buttons */
-    .btn-gradient-border {
-        background: linear-gradient(#0a0a14, #0a0a14) padding-box,
-                    linear-gradient(45deg, #f9005b, #9d00ff) border-box;
-        border: 1px solid transparent;
+    /* 4. Tech Card Spotlight & Buttons */
+    .slide-item {
+        position: relative;
     }
-    .btn-gradient-border:hover {
-        background: linear-gradient(45deg, #f9005b, #9d00ff) padding-box,
-                    linear-gradient(45deg, #f9005b, #9d00ff) border-box;
-        box-shadow: 0 0 20px rgba(249,0,91,0.4);
+    .slide-item::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        pointer-events: none;
+        background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(249,0,91,0.15), transparent 40%);
+        opacity: 0;
+        transition: opacity 0.5s ease;
     }
-
-    /* 4. Chaos Card Style */
+    .slide-item:hover::before {
+        opacity: 1;
+    }
+    
+    /* 5. Chaos Card Style */
     .animate-gradient-xy {
         background-size: 300% 300%;
         animation: gradientXY 6s ease infinite;
@@ -202,8 +243,8 @@
         z-index: 1;
     }
 
-    /* 5. Scary Face & City */
-    #scary-section, #city-section {
+    /* 6. Scary Face & City */
+    #scary-section, #city-section, #astronaut-canvas {
         cursor: crosshair;
     }
     #scene-container {
@@ -221,7 +262,7 @@
         -webkit-touch-callout: none;
     }
 
-    /* 6. Marquee */
+    /* 7. Marquee */
     .marquee-wrapper {
         overflow: hidden;
         white-space: nowrap;
@@ -290,7 +331,7 @@
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#f9005b] via-[#ff0055] to-[#9d00ff] pr-4">Canvas</span>
         </h1>
 
-        <!-- Subheadline yang Elegan -->
+        <!-- Subheadline -->
         <p class="text-base md:text-xl text-gray-300 font-sans max-w-3xl mx-auto leading-relaxed font-light text-shadow-sm mt-4">
             Eksplorasi dimensi baru. Kami menerjemahkan narasi brand Anda ke dalam arsitektur visual interaktif dan ekosistem WebGL yang hidup.
         </p>
@@ -312,15 +353,12 @@
 
 <!-- SECTION 2: THE MANIFESTO (Glitch Section) -->
 <section id="glitch-section" class="relative w-full h-screen bg-white flex items-center justify-center overflow-hidden z-30">
-    <!-- State 1: Boring Agency -->
     <div id="boring-state" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 z-20 will-change-transform px-4 text-center">
         <h2 class="text-3xl md:text-5xl font-sans text-gray-400 font-light mb-4">The Static Brochure.</h2>
         <p class="text-gray-400 font-sans max-w-xl">Teks datar, gambar diam, dan susunan template standar. Sangat aman, dan perlahan menidurkan audiens Anda.</p>
     </div>
     
-    <!-- State 2: Chaos / Disrupt DENGAN GAMBAR IMG4.JPG -->
     <div id="chaos-state" class="absolute inset-0 flex flex-col items-center justify-center z-10 opacity-0 transform scale-110 will-change-transform px-4 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/img4.jpg') }}');">
-        <!-- Overlay gelap agar teks glitch tetap terbaca jelas di atas gambar -->
         <div class="absolute inset-0 bg-black/70 z-0 pointer-events-none"></div>
 
         <div class="glitch-wrapper relative z-10">
@@ -330,9 +368,8 @@
     </div>
 </section>
 
-<!-- SECTION 3: THE CAPABILITIES (Slider Layanan) -->
+<!-- SECTION 3: THE CAPABILITIES (ADVANCED GSAP SLIDER) -->
 <section id="layanan" class="py-24 text-white overflow-hidden relative z-30 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/img5.jpg') }}');">
-    <!-- Overlay Gelap -->
     <div class="absolute inset-0 bg-black/80 z-0 pointer-events-none"></div>
 
     <div class="absolute top-10 left-[10%] w-[30rem] h-[30rem] bg-[#f9005b]/20 rounded-full blur-[120px] pointer-events-none z-0 transform-gpu"></div>
@@ -344,164 +381,152 @@
             <p class="text-lg text-gray-300 max-w-2xl font-mono tracking-wide">Keahlian teknis dan kreatif kami untuk membangun ekosistem digital yang solid.</p>
         </div>
         
-        <div id="roles-slider" class="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 pt-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] cursor-grab select-none">
-            
-            <!-- Card 1: UI/UX -->
-            <article class="snap-center shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#f9005b]/50 hover:shadow-[0_0_30px_rgba(249,0,91,0.2)] transition-all duration-500">
-                <!-- Top Half: Image -->
-                <div class="h-[55%] w-full relative overflow-hidden z-10">
-                    <div class="absolute top-5 left-5 z-20">
-                        <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#f9005b] animate-pulse"></span>
-                            CAP_01
+        <!-- Viewport Slider GSAP -->
+        <div class="slider-viewport">
+            <div id="slider-track" class="slider-track">
+                
+                <!-- Card 1: UI/UX -->
+                <article class="slide-item shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#f9005b]/50 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-500">
+                    <div class="h-[55%] w-full relative overflow-hidden z-10">
+                        <div class="absolute top-5 left-5 z-20">
+                            <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#f9005b] animate-pulse"></span>
+                                CAP_01
+                            </div>
                         </div>
+                        <img src="{{ asset('assets/images/ui-ux-representations-with-laptop.jpg') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="UI/UX">
+                        <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
                     </div>
-                    <img src="{{ asset('assets/images/ui-ux-representations-with-laptop.jpg') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="UI/UX">
-                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
-                </div>
+                    <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
+                        <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#f9005b] transition-colors">Immersive UI/UX</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Desain antarmuka yang berfokus pada estetika premium dan alur pengguna yang intuitif. Membawa audiens tenggelam dalam pengalaman digital.</p>
+                    </div>
+                </article>
 
-                <!-- Bottom Half: Content (Glass) -->
-                <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
-                    <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#f9005b] transition-colors duration-300">Immersive UI/UX</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Desain antarmuka yang berfokus pada estetika premium dan alur pengguna yang intuitif. Membawa audiens tenggelam dalam pengalaman digital.</p>
-                    
-                    <div class="mt-auto pt-4 flex items-center justify-between">
-                        <div class="h-[2px] w-12 bg-white/20 group-hover:bg-[#f9005b] transition-colors duration-300"></div>
-                        <div class="text-white/20 group-hover:text-[#f9005b] transition-colors duration-300">
-                            <svg class="w-6 h-6 transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <!-- Card 2: Web Dev -->
+                <article class="slide-item shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#9d00ff]/50 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-500">
+                    <div class="h-[55%] w-full relative overflow-hidden z-10">
+                        <div class="absolute top-5 left-5 z-20">
+                            <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#9d00ff] animate-pulse"></span>
+                                CAP_02
+                            </div>
                         </div>
+                        <img src="{{ asset('assets/images/web-dev.jpg') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Web Dev">
+                        <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
                     </div>
-                </div>
-            </article>
+                    <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
+                        <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#9d00ff] transition-colors">Creative Web Dev</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Pengembangan frontend dengan performa optimal, animasi halus, dan arsitektur kode modern. Perpaduan desain dan rekayasa perangkat lunak.</p>
+                    </div>
+                </article>
 
-            <!-- Card 2: Web Dev -->
-            <article class="snap-center shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#9d00ff]/50 hover:shadow-[0_0_30px_rgba(157,0,255,0.2)] transition-all duration-500">
-                <!-- Top Half: Image -->
-                <div class="h-[55%] w-full relative overflow-hidden z-10">
-                    <div class="absolute top-5 left-5 z-20">
-                        <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#9d00ff] animate-pulse"></span>
-                            CAP_02
+                <!-- Card 3: 3D & Motion -->
+                <article class="slide-item shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#f9005b]/50 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-500">
+                    <div class="h-[55%] w-full relative overflow-hidden z-10">
+                        <div class="absolute top-5 left-5 z-20">
+                            <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#f9005b] animate-pulse"></span>
+                                CAP_03
+                            </div>
                         </div>
+                        <img src="{{ asset('assets/images/img5.jpg') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="3D & Motion">
+                        <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
                     </div>
-                    <img src="{{ asset('assets/images/web-dev.jpg') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Web Dev">
-                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
-                </div>
+                    <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
+                        <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#f9005b] transition-colors">3D & Motion</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Integrasi aset 3D kustom dan motion graphics tingkat lanjut untuk menghidupkan identitas visual brand Anda secara dramatis.</p>
+                    </div>
+                </article>
 
-                <!-- Bottom Half: Content (Glass) -->
-                <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
-                    <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#9d00ff] transition-colors duration-300">Creative Web Dev</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Pengembangan frontend dengan performa optimal, animasi halus, dan arsitektur kode modern. Perpaduan desain dan rekayasa perangkat lunak.</p>
-                    
-                    <div class="mt-auto pt-4 flex items-center justify-between">
-                        <div class="h-[2px] w-12 bg-white/20 group-hover:bg-[#9d00ff] transition-colors duration-300"></div>
-                        <div class="text-white/20 group-hover:text-[#9d00ff] transition-colors duration-300">
-                            <svg class="w-6 h-6 transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                <!-- Card 4: Campaigns -->
+                <article class="slide-item shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#9d00ff]/50 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-500">
+                    <div class="h-[55%] w-full relative overflow-hidden z-10">
+                        <div class="absolute top-5 left-5 z-20">
+                            <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#9d00ff] animate-pulse"></span>
+                                CAP_04
+                            </div>
                         </div>
+                        <img src="{{ asset('assets/images/digital-campaign.jpg') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Campaigns">
+                        <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
                     </div>
-                </div>
-            </article>
+                    <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
+                        <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#9d00ff] transition-colors">Digital Campaigns</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Strategi interaktif dan aktivasi digital yang dirancang untuk memperkuat keterlibatan audiens dengan narasi brand yang kuat.</p>
+                    </div>
+                </article>
 
-            <!-- Card 3: 3D & Motion -->
-            <article class="snap-center shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#f9005b]/50 hover:shadow-[0_0_30px_rgba(249,0,91,0.2)] transition-all duration-500">
-                <!-- Top Half: Image -->
-                <div class="h-[55%] w-full relative overflow-hidden z-10">
-                    <div class="absolute top-5 left-5 z-20">
-                        <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#f9005b] animate-pulse"></span>
-                            CAP_03
+                <!-- Card 5: Brand Direction -->
+                <article class="slide-item shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#f9005b]/50 shadow-[0_8px_30px_rgba(0,0,0,0.5)] transition-all duration-500">
+                    <div class="h-[55%] w-full relative overflow-hidden z-10">
+                        <div class="absolute top-5 left-5 z-20">
+                            <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#f9005b] animate-pulse"></span>
+                                CAP_05
+                            </div>
                         </div>
+                        <img src="{{ asset('assets/images/art-directors.webp') }}" onerror="this.onerror=null; this.src='https://cdn-front.freepik.com/home/anon-rvmp/professionals/art-directors.webp';" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Brand Direction">
+                        <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
                     </div>
-                    <img src="{{ asset('assets/images/img5.jpg') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="3D & Motion">
-                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
-                </div>
-
-                <!-- Bottom Half: Content (Glass) -->
-                <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
-                    <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#f9005b] transition-colors duration-300">3D & Motion</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Integrasi aset 3D kustom dan motion graphics tingkat lanjut untuk menghidupkan identitas visual brand Anda secara dramatis.</p>
-                    
-                    <div class="mt-auto pt-4 flex items-center justify-between">
-                        <div class="h-[2px] w-12 bg-white/20 group-hover:bg-[#f9005b] transition-colors duration-300"></div>
-                        <div class="text-white/20 group-hover:text-[#f9005b] transition-colors duration-300">
-                            <svg class="w-6 h-6 transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </div>
+                    <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
+                        <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#f9005b] transition-colors">Brand Direction</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Arahan visual yang konsisten untuk memastikan karakter eksklusif brand Anda tetap terjaga di setiap titik sentuh digital.</p>
                     </div>
-                </div>
-            </article>
+                </article>
 
-            <!-- Card 4: Campaigns -->
-            <article class="snap-center shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#9d00ff]/50 hover:shadow-[0_0_30px_rgba(157,0,255,0.2)] transition-all duration-500">
-                <!-- Top Half: Image -->
-                <div class="h-[55%] w-full relative overflow-hidden z-10">
-                    <div class="absolute top-5 left-5 z-20">
-                        <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#9d00ff] animate-pulse"></span>
-                            CAP_04
-                        </div>
-                    </div>
-                    <img src="{{ asset('assets/images/digital-campaign.jpg') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Campaigns">
-                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
-                </div>
-
-                <!-- Bottom Half: Content (Glass) -->
-                <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
-                    <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#9d00ff] transition-colors duration-300">Digital Campaigns</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Strategi interaktif dan aktivasi digital yang dirancang untuk memperkuat keterlibatan audiens dengan narasi brand yang kuat.</p>
-                    
-                    <div class="mt-auto pt-4 flex items-center justify-between">
-                        <div class="h-[2px] w-12 bg-white/20 group-hover:bg-[#9d00ff] transition-colors duration-300"></div>
-                        <div class="text-white/20 group-hover:text-[#9d00ff] transition-colors duration-300">
-                            <svg class="w-6 h-6 transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- Card 5: Brand Direction -->
-            <article class="snap-center shrink-0 w-[85vw] md:w-[380px] h-[520px] flex flex-col rounded-[2rem] overflow-hidden relative group bg-[#0a0a14]/60 backdrop-blur-xl border border-white/10 hover:border-[#f9005b]/50 hover:shadow-[0_0_30px_rgba(249,0,91,0.2)] transition-all duration-500">
-                <!-- Top Half: Image -->
-                <div class="h-[55%] w-full relative overflow-hidden z-10">
-                    <div class="absolute top-5 left-5 z-20">
-                        <div class="px-4 py-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-full font-mono text-[10px] text-white tracking-[0.2em] flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#f9005b] animate-pulse"></span>
-                            CAP_05
-                        </div>
-                    </div>
-                    <img src="{{ asset('assets/images/art-directors.webp') }}" onerror="this.onerror=null; this.src='https://cdn-front.freepik.com/home/anon-rvmp/professionals/art-directors.webp';" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" alt="Brand Direction">
-                    <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#0a0a14]/90 to-transparent"></div>
-                </div>
-
-                <!-- Bottom Half: Content (Glass) -->
-                <div class="p-8 pt-4 flex-1 flex flex-col justify-start relative z-10">
-                    <h3 class="text-3xl font-black text-white mb-3 tracking-wide uppercase italic group-hover:text-[#f9005b] transition-colors duration-300">Brand Direction</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed font-sans font-light">Arahan visual yang konsisten untuk memastikan karakter eksklusif brand Anda tetap terjaga di setiap titik sentuh digital.</p>
-                    
-                    <div class="mt-auto pt-4 flex items-center justify-between">
-                        <div class="h-[2px] w-12 bg-white/20 group-hover:bg-[#f9005b] transition-colors duration-300"></div>
-                        <div class="text-white/20 group-hover:text-[#f9005b] transition-colors duration-300">
-                            <svg class="w-6 h-6 transform -rotate-45 group-hover:rotate-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
+            </div>
         </div>
 
-        <!-- Slide Buttons (Moved Below) -->
-        <div class="flex items-center justify-center gap-4 mt-8 relative z-20">
-            <button onclick="document.getElementById('roles-slider').scrollBy({left: -400, behavior: 'smooth'})" class="w-14 h-14 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-[#f9005b] hover:border-[#f9005b] transition-all group shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-                <svg class="w-6 h-6 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-            </button>
-            <button onclick="document.getElementById('roles-slider').scrollBy({left: 400, behavior: 'smooth'})" class="w-14 h-14 rounded-full border border-white/20 bg-white/5 backdrop-blur-md flex items-center justify-center text-white hover:bg-[#f9005b] hover:border-[#f9005b] transition-all group shadow-[0_0_20px_rgba(0,0,0,0.5)]">
-                <svg class="w-6 h-6 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-            </button>
+        <!-- Controls Slider GSAP -->
+        <div class="flex flex-col items-center gap-8 mt-12 relative z-20">
+            <div class="flex items-center gap-6">
+                <button id="prev-slide" class="btn-nav-slider">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                
+                <!-- Progress Line -->
+                <div class="slider-progress-bg hidden md:block">
+                    <div id="slider-progress" class="slider-progress-fill"></div>
+                </div>
+
+                <button id="next-slide" class="btn-nav-slider">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
         </div>
     </div>
 </section>
 
+<!-- SECTION ASTRONAUT 3D -->
+<section id="astronaut-section" class="relative w-full h-screen bg-[#05050a] flex items-center justify-center overflow-hidden z-30 border-t border-white/10">
+    
+    <!-- Container Canvas 3D -->
+    <div id="astronaut-canvas" class="absolute inset-0 w-full h-full cursor-move z-10"></div>
+
+    <!-- Teks Overlay -->
+    <div class="absolute z-20 text-center pointer-events-none px-4 flex flex-col items-center">
+        <div class="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
+            <span class="w-2 h-2 rounded-full bg-[#9d00ff] animate-pulse"></span>
+            <span class="text-xs font-mono text-gray-300 tracking-widest uppercase">Pioneer The Future</span>
+        </div>
+        <h2 class="text-6xl md:text-8xl lg:text-[9rem] text-white drop-shadow-2xl leading-none" style="font-family: 'Lobster', cursive;">
+            Limitless <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#f9005b] to-[#9d00ff]">Exploration</span>
+        </h2>
+        <p class="mt-6 font-sans text-gray-400 text-sm md:text-base max-w-lg bg-[#0a0a14]/60 p-4 rounded-2xl border border-white/5 backdrop-blur-sm font-light">
+            [ INTERACT ] Geser layar untuk mengeksplorasi dimensi. Kami membawa brand Anda melampaui batasan konvensional.
+        </p>
+    </div>
+
+    <!-- Loading Indikator -->
+    <div id="astro-loader" class="absolute z-30 flex flex-col items-center gap-3 transition-opacity duration-500">
+        <div class="w-10 h-10 border-2 border-white/20 border-t-[#f9005b] rounded-full animate-spin"></div>
+        <span class="text-xs font-mono text-[#f9005b] tracking-widest uppercase animate-pulse">Memuat Aset 3D...</span>
+    </div>
+</section>
+
 <!-- SECTION 4: THE SHOWCASE (Portaplane / Scary Face / City 3D) -->
-<!-- Portaplane 3D Interaction -->
 <section id="section-portaplane" class="relative w-full h-[95vh] bg-black flex items-center justify-center overflow-hidden z-30 border-t border-white/10">
     <div id="portaplane-canvas-wrapper" class="absolute inset-0 w-full h-full block">
         
@@ -571,7 +596,6 @@
 <section id="scary-section" class="relative w-full h-[60vh] md:h-screen bg-black flex items-center justify-center overflow-hidden z-30 border-t md:border-t-0 border-white/5">
     <div id="scene-container"></div>
     
-    <!-- Overlay Informasi 3D Modeling (Desktop Only) -->
     <div class="hidden md:block absolute top-12 left-6 md:top-24 md:left-24 z-20 pointer-events-none">
         <div class="mb-4 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#f9005b]/30 bg-[#f9005b]/10 backdrop-blur-md">
             <span class="text-xs md:text-sm font-mono text-[#f9005b] tracking-widest uppercase">/// 3D Integration</span>
@@ -585,7 +609,6 @@
         </p>
     </div>
 
-    <!-- Instruksi Interaksi -->
     <div class="absolute bottom-6 md:bottom-10 left-6 md:left-24 z-10 text-xs md:text-sm text-gray-300 font-mono pointer-events-none bg-[#0a0a14]/80 px-5 py-3 rounded-full border border-white/10 flex items-center gap-3 backdrop-blur-md shadow-lg">
         <span class="w-2.5 h-2.5 rounded-full bg-[#f9005b] animate-ping relative"><span class="absolute inset-0 bg-[#f9005b] rounded-full"></span></span>
         <span class="md:hidden">[ INTERACT ] Touch & drag</span>
@@ -689,68 +712,51 @@
     </div>
 </section>
 
-<!-- SECTION 6: THE VIBE CONFIGURATOR (FUTURISTIC HUD VERSION) -->
-<section id="vibe-section" class="py-32 relative transition-all duration-700 flex flex-col items-center justify-center z-30" style="background-color: #f8f9fa; color: #333333;">
-    <h2 id="vibe-title" class="text-4xl md:text-6xl font-bold mb-12 transition-all duration-500 text-center px-4" style="font-family: 'Lobster', cursive; font-weight: normal; drop-shadow: 0 4px 6px rgba(0,0,0,0.1);">The Foundation.</h2>
+<!-- SECTION 6 & 7 MERGED: THE VIBE CONFIGURATOR & CTA -->
+<section id="vibe-section" class="py-24 md:py-32 relative transition-all duration-700 flex flex-col items-center justify-center z-30" style="background-color: #f8f9fa; color: #333333;">
+    <h2 id="vibe-title" class="text-4xl md:text-6xl font-bold mb-12 transition-all duration-500 text-center px-4" style="font-family: sans-serif; font-weight: normal;">The Safe Zone.</h2>
     
-    <div class="w-full max-w-4xl px-6 flex flex-col items-center">
+    <div class="w-full max-w-[90rem] mx-auto px-6 flex flex-col items-center gap-8 md:gap-16">
         
-        <!-- Futuristic Slider Housing -->
-        <div class="relative w-full p-8 md:p-12 rounded-[2.5rem] border border-gray-400/30 bg-gray-500/5 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden group transition-colors duration-500" id="vibe-housing">
+        <!-- UI Control (Housing) -->
+        <div class="relative w-full max-w-4xl p-8 md:p-12 rounded-[2.5rem] border border-gray-400/30 bg-gray-500/5 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.05)] overflow-hidden group transition-colors duration-500" id="vibe-housing">
             
-            <!-- Animated Background Glow -->
             <div class="absolute inset-0 bg-gradient-to-r from-[#f9005b]/5 via-[#9d00ff]/5 to-[#ff0055]/5 opacity-50 blur-3xl pointer-events-none"></div>
 
-            <!-- HUD Decorative elements -->
             <div class="absolute top-6 left-8 flex items-center gap-2 pointer-events-none">
                 <span class="w-2 h-2 rounded-full bg-[#f9005b] animate-pulse"></span>
                 <span class="text-[10px] font-mono tracking-widest opacity-60 uppercase font-bold">System Vibe Control</span>
             </div>
-            <div class="absolute top-6 right-8 text-[10px] font-mono tracking-widest opacity-60 uppercase font-bold pointer-events-none">
-                [ CFG_01 ]
-            </div>
-
-            <!-- Slider Track Area -->
+            
             <div class="relative z-10 mt-12 mb-8">
-                 <!-- Background Ticks (Responsive to text color) -->
                  <div class="absolute w-full flex justify-between top-1/2 -translate-y-1/2 px-[10px] pointer-events-none opacity-30 z-0">
                      <div class="h-6 w-1 bg-current rounded-full"></div>
                      <div class="h-6 w-1 bg-current rounded-full"></div>
                      <div class="h-6 w-1 bg-current rounded-full"></div>
                  </div>
                  
-                 <!-- The Input Element -->
                  <input type="range" id="vibe-slider" min="0" max="100" value="0" class="advanced-slider relative z-20 w-full">
             </div>
 
-            <!-- Label Slider (Interactive) -->
             <div class="flex justify-between w-full mt-4 text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-inherit opacity-80 font-mono relative z-10">
-                <span class="text-left w-1/3 cursor-pointer hover:text-[#f9005b] transition-colors" onclick="document.getElementById('vibe-slider').value=0; document.getElementById('vibe-slider').dispatchEvent(new Event('input'));">Essential</span>
-                <span class="text-center w-1/3 cursor-pointer hover:text-[#9d00ff] transition-colors" onclick="document.getElementById('vibe-slider').value=50; document.getElementById('vibe-slider').dispatchEvent(new Event('input'));">Elevated</span>
-                <span class="text-right w-1/3 cursor-pointer hover:text-[#ff0055] transition-colors" onclick="document.getElementById('vibe-slider').value=100; document.getElementById('vibe-slider').dispatchEvent(new Event('input'));">Avant-Garde</span>
+                <span class="text-left w-1/3 cursor-pointer hover:text-[#f9005b] transition-colors" onclick="document.getElementById('vibe-slider').value=0; document.getElementById('vibe-slider').dispatchEvent(new Event('input'));">Biasa</span>
+                <span class="text-center w-1/3 cursor-pointer hover:text-[#9d00ff] transition-colors" onclick="document.getElementById('vibe-slider').value=50; document.getElementById('vibe-slider').dispatchEvent(new Event('input'));">Menengah</span>
+                <span class="text-right w-1/3 cursor-pointer hover:text-[#ff0055] transition-colors" onclick="document.getElementById('vibe-slider').value=100; document.getElementById('vibe-slider').dispatchEvent(new Event('input'));">Brutal</span>
             </div>
-            
-            <!-- Tech accents at the bottom -->
-            <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-20 pointer-events-none"></div>
         </div>
         
-    </div>
-</section>
-
-<!-- SECTION 7: TRUST & ACTION (CTA & Clients) -->
-<section id="kontak" class="py-24 relative z-30 overflow-hidden transition-all duration-700" style="background-color: #e9ecef;">
-    <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
-        <div id="cta-card" class="bg-white rounded-[2.5rem] p-12 md:p-20 text-center shadow-xl relative overflow-hidden border border-gray-200 transition-all duration-500 max-w-5xl mx-auto">
-            <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-gray-100 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-gray-100 rounded-full blur-3xl"></div>
+        <!-- CTA Card yang Merespon Slider -->
+        <div id="cta-card" class="bg-white rounded-xl p-10 md:p-16 text-center shadow-md relative overflow-hidden border border-gray-200 transition-all duration-500 max-w-4xl mx-auto mt-8 w-full">
+            <h2 id="cta-heading" class="text-3xl font-bold text-gray-800 mb-4" style="font-family: sans-serif;">Ready to Start?</h2>
+            <p id="cta-desc" class="text-gray-600 mb-8 font-sans text-base tracking-normal border-none bg-transparent p-0 max-w-2xl mx-auto">
+                Pendekatan standar yang teruji. Aman, fungsional, dan langsung pada tujuannya. Hubungi kami untuk berkonsultasi.
+            </p>
             
-            <h2 id="cta-heading" class="text-4xl md:text-5xl font-bold text-gray-800 mb-6 relative z-10 drop-shadow-sm" style="font-family: 'Lobster', cursive; font-weight: normal;">Ready to Collaborate?</h2>
-            <p id="cta-desc" class="text-gray-600 mb-10 font-sans text-lg tracking-wide max-w-2xl mx-auto relative z-10 font-light leading-relaxed">Mari berdiskusi. Kami siap merancang solusi visual yang tak terduga untuk mentransformasi identitas digital Anda.</p>
-            
-            <a href="mailto:rizkialiakhbar@gmail.com" id="vibe-btn" class="inline-block bg-blue-600 text-white font-semibold px-10 py-4 rounded-full hover:bg-blue-700 transition-colors shadow-lg border-none relative z-10 text-sm uppercase tracking-widest">
-                Start a Project
+            <a href="mailto:rizkialiakhbar@gmail.com" id="vibe-btn" class="inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded hover:bg-blue-700 transition-colors shadow-none border-none relative z-10 text-sm uppercase tracking-widest">
+                Contact Us
             </a>
         </div>
+        
     </div>
 </section>
 
@@ -765,21 +771,18 @@
 
     <div class="marquee-wrapper w-full py-8">
         <div class="marquee-content gap-16 md:gap-32 px-16">
-            <!-- Set 1 -->
             <h3 class="client-brand text-3xl md:text-5xl font-black text-white uppercase tracking-widest">NEXUS.</h3>
             <h3 class="client-brand text-3xl md:text-5xl font-bold text-white uppercase font-serif italic">Aether</h3>
             <h3 class="client-brand text-3xl md:text-5xl font-black text-white uppercase font-mono tracking-tighter">CYBER<span class="text-[#f9005b]">DYNE</span></h3>
             <h3 class="client-brand text-4xl md:text-6xl font-normal text-white" style="font-family: 'Lobster', cursive;">Lumina</h3>
             <h3 class="client-brand text-3xl md:text-5xl font-black text-white uppercase tracking-widest border-4 border-white px-6 py-2">OBELISK</h3>
             
-            <!-- Set 2 -->
             <h3 class="client-brand text-3xl md:text-5xl font-black text-white uppercase tracking-widest">NEXUS.</h3>
             <h3 class="client-brand text-3xl md:text-5xl font-bold text-white uppercase font-serif italic">Aether</h3>
             <h3 class="client-brand text-3xl md:text-5xl font-black text-white uppercase font-mono tracking-tighter">CYBER<span class="text-[#f9005b]">DYNE</span></h3>
             <h3 class="client-brand text-4xl md:text-6xl font-normal text-white" style="font-family: 'Lobster', cursive;">Lumina</h3>
             <h3 class="client-brand text-3xl md:text-5xl font-black text-white uppercase tracking-widest border-4 border-white px-6 py-2">OBELISK</h3>
 
-            <!-- Set 3 -->
             <h3 class="client-brand text-3xl md:text-5xl font-black text-white uppercase tracking-widest">NEXUS.</h3>
             <h3 class="client-brand text-3xl md:text-5xl font-bold text-white uppercase font-serif italic">Aether</h3>
             <h3 class="client-brand text-3xl md:text-5xl font-black text-white uppercase font-mono tracking-tighter">CYBER<span class="text-[#f9005b]">DYNE</span></h3>
@@ -808,6 +811,7 @@
 </script>
 
 <script type="module" src="{{ asset('js/home-scary.js') }}"></script>
+<script type="module" src="{{ asset('js/home-astronaut.js') }}"></script>
 
 <!-- SCRIPT UNTUK LIVE PREVIEW IFRAME -->
 <script>
@@ -828,12 +832,10 @@
                 </button>
             </div>
             <div class="relative flex-1 w-full h-full bg-[#000]">
-                <!-- Loading Spinner -->
                 <div id="modal-loader" class="absolute inset-0 flex flex-col items-center justify-center bg-[#080815] z-10 transition-opacity duration-300">
                     <div class="w-12 h-12 border-4 border-white/10 border-t-[#f9005b] rounded-full animate-spin mb-4"></div>
                     <p class="text-gray-400 font-mono text-sm tracking-widest animate-pulse">Menghubungkan...</p>
                 </div>
-                <!-- Iframe Sebenarnya -->
                 <iframe id="modal-iframe" src="about:blank" class="w-full h-full border-none relative z-0 custom-scrollbar" allow="autoplay; fullscreen"></iframe>
             </div>
         `;

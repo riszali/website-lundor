@@ -10,7 +10,7 @@
                 <a href="{{ url('/') }}" class="group block relative">
                     <div class="absolute -inset-2 bg-[#f9005b]/20 rounded-full blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <img class="h-10 md:h-12 w-auto relative z-10 transition-transform duration-500 group-hover:scale-105" 
-                         src="{{ asset('assets/images/logo-lundor-white.png') }}" 
+                         src="{{ asset('assets/images/logo-client/LOGOEsensee.png') }}" 
                          alt="Lund'or Imagine Digital">
                 </a>
             </div>
@@ -76,7 +76,6 @@
             <!-- Call to Actions Desktop -->
             <div class="hidden lg:flex items-stretch space-x-8 h-20">
                 <div class="flex items-center">
-                    <!-- DIUBAH: Mengarah ke /login dengan teks Login System -->
                     <a href="{{ url('/login') }}" class="relative overflow-hidden group font-sans bg-[#f9005b] text-white px-8 py-3.5 rounded-full text-[10px] font-bold tracking-[0.2em] transition-all duration-500 shadow-[0_10px_20px_rgba(249,0,91,0.3)] hover:shadow-[0_15px_30px_rgba(249,0,91,0.5)] hover:-translate-y-1 uppercase">
                         <span class="relative z-10 flex items-center gap-2">
                             Login System
@@ -175,7 +174,6 @@
 
     <!-- Mobile CTA Bottom -->
     <div id="mobile-menu-footer" class="relative z-10 mt-8 transform translate-y-6 transition-transform duration-500 ease-out delay-150">
-        <!-- DIUBAH: Mengarah ke /login dengan teks System Access -->
         <a href="{{ url('/login') }}" class="w-full flex items-center justify-center gap-2 bg-[#f9005b]/90 backdrop-blur-xl border border-[#f9005b]/50 text-white py-3.5 rounded-2xl font-sans text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 shadow-[0_4px_15px_rgba(249,0,91,0.3)] hover:shadow-[0_8px_20px_rgba(249,0,91,0.5)] hover:bg-[#f9005b] hover:-translate-y-0.5">
             System Access 
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>

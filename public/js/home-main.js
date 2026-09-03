@@ -44,29 +44,193 @@ document.addEventListener("DOMContentLoaded", () => {
     glitchTl.to("#chaos-state", { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }, "-=0.5");
 
     // --- 3. Script Drag-to-Scroll Slider & Hover Spotlight ---
-    const slider = document.getElementById('roles-slider');
-    let isDown = false;
-    let startX;
-    let scrollLeft;
+    const sliderTrack = document.getElementById('slider-track');
+    const prevSlideBtn = document.getElementById('prev-slide');
+    const nextSlideBtn = document.getElementById('next-slide');
+    const sliderProgress = document.getElementById('slider-progress');
+    const slides = document.querySelectorAll('.slide-item');
 
-    slider.addEventListener('mousedown', (e) => {
-        isDown = true;
-        slider.classList.add('cursor-grabbing');
-        slider.classList.remove('snap-x', 'snap-mandatory'); 
-        startX = e.pageX - slider.offsetLeft;
-        scrollLeft = slider.scrollLeft;
-    });
-    slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.remove('cursor-grabbing'); slider.classList.add('snap-x', 'snap-mandatory'); });
-    slider.addEventListener('mouseup', () => { isDown = false; slider.classList.remove('cursor-grabbing'); slider.classList.add('snap-x', 'snap-mandatory'); });
-    slider.addEventListener('mousemove', (e) => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - slider.offsetLeft;
-        const walk = (x - startX) * 2; 
-        slider.scrollLeft = scrollLeft - walk;
-    });
+    if (sliderTrack && slides.length > 0) {
+        let currentIndex = 0;
+        let slideWidth = slides[0].offsetWidth + 24; // Lebar slide + gap (24px)
+        const totalSlides = slides.length;
 
-    const techCards = document.querySelectorAll('.tech-card');
+        // Fungsi untuk mengupdate posisi slider
+        function updateSliderPosition() {
+            slideWidth = slides[0].offsetWidth + 24;
+            const trackWidth = sliderTrack.scrollWidth;
+            const viewportWidth = sliderTrack.parentElement.offsetWidth;
+            const maxTranslate = Math.max(0, trackWidth - viewportWidth);
+            
+            let targetX = currentIndex * slideWidth;
+            if (targetX > maxTranslate) {
+                targetX = maxTranslate;
+            }
+
+            // Animasi pergeseran track slider
+            gsap.to(sliderTrack, {
+                x: -targetX,
+                duration: 0.6,
+                ease: "power3.out"
+            });
+
+            // Update Progress Bar (dari 20% hingga 100%)
+            if (sliderProgress) {
+                const visibleSlides = Math.max(1, Math.floor(viewportWidth / slideWidth));
+                const maxIndexForProgress = totalSlides - visibleSlides;
+                const safeMaxIndex = Math.max(1, maxIndexForProgress);
+                
+                let progressPercent = 20 + (currentIndex / safeMaxIndex) * 80;
+                progressPercent = Math.min(100, progressPercent);
+
+                gsap.to(sliderProgress, {
+                    width: `${progressPercent}%`,
+                    duration: 0.6,
+                    ease: "power3.out"
+                });
+            }
+
+            // Update status tombol (disable/enable)
+            if (prevSlideBtn) {
+                prevSlideBtn.disabled = currentIndex === 0;
+                gsap.to(prevSlideBtn, { opacity: currentIndex === 0 ? 0.2 : 1, duration: 0.3 });
+            }
+            if (nextSlideBtn) {
+                const isAtEnd = targetX >= maxTranslate;
+                nextSlideBtn.disabled = isAtEnd;
+                gsap.to(nextSlideBtn, { opacity: isAtEnd ? 0.2 : 1, duration: 0.3 });
+            }
+        }
+
+        // Event Listener Tombol Next
+        if (nextSlideBtn) {
+            nextSlideBtn.addEventListener('click', () => {
+                slideWidth = slides[0].offsetWidth + 24;
+                const viewportWidth = sliderTrack.parentElement.offsetWidth;
+                const maxIndex = totalSlides - Math.max(1, Math.floor(viewportWidth / slideWidth));
+
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                    updateSliderPosition();
+                }
+            });
+        }
+
+        // Event Listener Tombol Prev
+        if (prevSlideBtn) {
+            prevSlideBtn.addEventListener('click', () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateSliderPosition();
+                }
+            });
+        }
+
+        // Inisialisasi posisi awal
+        updateSliderPosition();
+
+        // Drag to Scroll Logic menggunakan GSAP & Mouse/Touch Event
+        let isDragging = false;
+        let startX;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+
+        sliderTrack.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.pageX;
+            sliderTrack.style.cursor = 'grabbing';
+            gsap.killTweensOf(sliderTrack);
+            prevTranslate = gsap.getProperty(sliderTrack, "x") || 0;
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            sliderTrack.style.cursor = 'grab';
+
+            const movedBy = currentTranslate - prevTranslate;
+            slideWidth = slides[0].offsetWidth + 24;
+            
+            // Tentukan apakah perlu bergeser ke slide berikutnya atau sebelumnya berdasarkan jarak drag
+            if (movedBy < -50) { 
+                const viewportWidth = sliderTrack.parentElement.offsetWidth;
+                const maxIndex = totalSlides - Math.max(1, Math.floor(viewportWidth / slideWidth));
+                if (currentIndex < maxIndex) currentIndex++;
+            } else if (movedBy > 50) { 
+                if (currentIndex > 0) currentIndex--;
+            }
+
+            updateSliderPosition();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX;
+            const walk = x - startX;
+            currentTranslate = prevTranslate + walk;
+            
+            const trackWidth = sliderTrack.scrollWidth;
+            const viewportWidth = sliderTrack.parentElement.offsetWidth;
+            const maxTranslate = Math.max(0, trackWidth - viewportWidth);
+
+            // Efek memantul saat mentok di ujung kiri atau ujung kanan
+            if (currentTranslate > 0) currentTranslate = currentTranslate * 0.3;
+            else if (currentTranslate < -maxTranslate) currentTranslate = -maxTranslate + ((currentTranslate + maxTranslate) * 0.3);
+
+            gsap.set(sliderTrack, { x: currentTranslate });
+        });
+
+        // Touch Events untuk Perangkat Seluler
+        sliderTrack.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            gsap.killTweensOf(sliderTrack);
+            prevTranslate = gsap.getProperty(sliderTrack, "x") || 0;
+        }, { passive: true });
+
+        window.addEventListener('touchend', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const movedBy = currentTranslate - prevTranslate;
+            slideWidth = slides[0].offsetWidth + 24;
+            
+            if (movedBy < -30) { 
+                const viewportWidth = sliderTrack.parentElement.offsetWidth;
+                const maxIndex = totalSlides - Math.max(1, Math.floor(viewportWidth / slideWidth));
+                if (currentIndex < maxIndex) currentIndex++;
+            } else if (movedBy > 30) { 
+                if (currentIndex > 0) currentIndex--;
+            }
+
+            updateSliderPosition();
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const x = e.touches[0].clientX;
+            const walk = x - startX;
+            currentTranslate = prevTranslate + walk;
+            
+            const trackWidth = sliderTrack.scrollWidth;
+            const viewportWidth = sliderTrack.parentElement.offsetWidth;
+            const maxTranslate = Math.max(0, trackWidth - viewportWidth);
+
+            if (currentTranslate > 0) currentTranslate = currentTranslate * 0.3;
+            else if (currentTranslate < -maxTranslate) currentTranslate = -maxTranslate + ((currentTranslate + maxTranslate) * 0.3);
+
+            gsap.set(sliderTrack, { x: currentTranslate });
+        }, { passive: true });
+
+        // Update ketika layar di-resize
+        window.addEventListener('resize', () => {
+            updateSliderPosition();
+        });
+    }
+
+    // Hover Spotlight Effect untuk Tech Cards (tetap dipertahankan)
+    const techCards = document.querySelectorAll('.slide-item');
     techCards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
@@ -509,79 +673,93 @@ document.addEventListener("DOMContentLoaded", () => {
     const vibeSlider = document.getElementById('vibe-slider');
     const vibeSection = document.getElementById('vibe-section');
     const vibeTitle = document.getElementById('vibe-title');
-    const kontakSection = document.getElementById('kontak');
     const ctaCard = document.getElementById('cta-card');
     const ctaHeading = document.getElementById('cta-heading');
     const ctaDesc = document.getElementById('cta-desc');
     const vibeBtn = document.getElementById('vibe-btn');
 
-    vibeSlider.addEventListener('input', (e) => {
-        const val = parseInt(e.target.value);
-        
-        // Reset properti ke default sebelum menerapkan state khusus
-        vibeTitle.style.textShadow = 'none';
-        vibeTitle.style.letterSpacing = 'normal';
-        vibeTitle.style.transform = 'scale(1)';
-        ctaHeading.removeAttribute('data-text');
+    if (vibeSlider) {
+        vibeSlider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            
+            // Reset properti standar agar transisi mulus
+            vibeTitle.style.textShadow = 'none';
+            vibeTitle.style.letterSpacing = 'normal';
+            vibeTitle.style.transform = 'scale(1)';
+            if (ctaHeading) ctaHeading.removeAttribute('data-text');
 
-        if(val < 33) {
-            // State 1: SAFE / CORPORATE
-            vibeSection.style.backgroundColor = '#f8f9fa';
-            vibeSection.style.color = '#333333';
-            vibeTitle.innerText = "The Safe Zone.";
-            vibeTitle.style.fontFamily = 'sans-serif';
-            
-            kontakSection.style.backgroundColor = '#e9ecef';
-            ctaCard.className = "bg-white rounded-xl p-10 md:p-16 text-center shadow-md relative overflow-hidden border border-gray-200 transition-all duration-500 max-w-4xl mx-auto";
-            ctaHeading.className = "text-3xl font-bold text-gray-800 mb-4";
-            ctaHeading.style.fontFamily = 'sans-serif';
-            ctaHeading.innerText = "Ready to Start?";
-            ctaDesc.className = "text-gray-600 mb-8 font-sans text-base tracking-normal border-none bg-transparent p-0";
-            ctaDesc.innerText = "Pendekatan standar yang teruji. Aman, fungsional, dan langsung pada tujuannya. Hubungi kami untuk berkonsultasi.";
-            
-            vibeBtn.className = "inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded hover:bg-blue-700 transition-colors shadow-none border-none relative z-10";
-            vibeBtn.innerText = "Contact Us";
+            if(val < 33) {
+                // State 1: SAFE / CORPORATE (Orisinal)
+                vibeSection.style.backgroundColor = '#f8f9fa';
+                vibeSection.style.color = '#333333';
+                
+                vibeTitle.innerText = "The Safe Zone.";
+                vibeTitle.style.fontFamily = 'sans-serif';
+                
+                if (ctaCard) ctaCard.className = "bg-white rounded-xl p-10 md:p-16 text-center shadow-md relative overflow-hidden border border-gray-200 transition-all duration-500 w-full max-w-4xl mx-auto mt-8";
+                if (ctaHeading) {
+                    ctaHeading.className = "text-3xl font-bold text-gray-800 mb-4";
+                    ctaHeading.style.fontFamily = 'sans-serif';
+                    ctaHeading.innerText = "Ready to Start?";
+                }
+                if (ctaDesc) {
+                    ctaDesc.className = "text-gray-600 mb-8 font-sans text-base tracking-normal border-none bg-transparent p-0 max-w-2xl mx-auto";
+                    ctaDesc.innerText = "Pendekatan standar yang teruji. Aman, fungsional, dan langsung pada tujuannya. Hubungi kami untuk berkonsultasi.";
+                }
+                if (vibeBtn) {
+                    vibeBtn.className = "inline-block bg-blue-600 text-white font-semibold px-8 py-3 rounded hover:bg-blue-700 transition-colors shadow-none border-none relative z-10 text-sm uppercase tracking-widest";
+                    vibeBtn.innerHTML = "Contact Us";
+                }
 
-        } else if (val < 66) {
-            // State 2: MODERN / ELEVATED
-            vibeSection.style.backgroundColor = '#1a1a2e';
-            vibeSection.style.color = '#ffffff';
-            vibeTitle.innerText = "Modern & Elevated.";
-            vibeTitle.style.fontFamily = "'Lobster', cursive";
-            vibeTitle.style.transform = 'scale(1.1)';
-            
-            kontakSection.style.backgroundColor = '#1a1a2e';
-            ctaCard.className = "bg-[#080815] rounded-3xl p-10 md:p-16 text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden border border-white/10 transition-all duration-500 max-w-5xl mx-auto";
-            ctaHeading.className = "text-4xl md:text-5xl font-normal text-[#9d00ff] mb-6";
-            ctaHeading.style.fontFamily = "'Lobster', cursive";
-            ctaHeading.innerText = "Elevate Your Presence";
-            ctaDesc.className = "text-gray-300 mb-10 text-lg font-sans tracking-normal border-none bg-transparent p-0";
-            ctaDesc.innerText = "Estetika premium dengan interaksi dinamis. Langkah pertama yang elegan untuk menonjol dari kompetitor Anda.";
-            
-            vibeBtn.className = "inline-block bg-white text-black font-bold px-10 py-4 rounded-full shadow-lg hover:bg-gray-200 transition-all hover:-translate-y-1 border-none relative z-10";
-            vibeBtn.innerText = "Start Your Journey";
+            } else if (val < 66) {
+                // State 2: MODERN / ELEVATED (Orisinal)
+                vibeSection.style.backgroundColor = '#1a1a2e';
+                vibeSection.style.color = '#ffffff';
+                
+                vibeTitle.innerText = "Modern & Elevated.";
+                vibeTitle.style.fontFamily = "'Lobster', cursive";
+                vibeTitle.style.transform = 'scale(1.1)';
+                
+                if (ctaCard) ctaCard.className = "bg-[#080815] rounded-3xl p-10 md:p-16 text-center shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative overflow-hidden border border-white/10 transition-all duration-500 w-full max-w-5xl mx-auto mt-8";
+                if (ctaHeading) {
+                    ctaHeading.className = "text-4xl md:text-5xl font-normal text-[#9d00ff] mb-6";
+                    ctaHeading.style.fontFamily = "'Lobster', cursive";
+                    ctaHeading.innerText = "Elevate Your Presence";
+                }
+                if (ctaDesc) {
+                    ctaDesc.className = "text-gray-300 mb-10 text-lg font-sans tracking-normal border-none bg-transparent p-0 max-w-2xl mx-auto";
+                    ctaDesc.innerText = "Estetika premium dengan interaksi dinamis. Langkah pertama yang elegan untuk menonjol dari kompetitor Anda.";
+                }
+                if (vibeBtn) {
+                    vibeBtn.className = "inline-block bg-white text-black font-bold px-10 py-4 rounded-full shadow-lg hover:bg-gray-200 transition-all hover:-translate-y-1 border-none relative z-10 text-sm uppercase tracking-widest";
+                    vibeBtn.innerHTML = "Start Your Journey";
+                }
 
-        } else {
-            // State 3: DISRUPT / CHAOS 
-            vibeSection.style.backgroundColor = '#000000';
-            vibeSection.style.color = '#f9005b';
-            vibeTitle.innerText = "PURE DISRUPTION.";
-            vibeTitle.style.fontFamily = 'Impact, sans-serif';
-            vibeTitle.style.transform = 'scale(1.2) rotate(-2deg)';
-            
-            kontakSection.style.backgroundColor = '#000000';
-            
-            ctaCard.className = "bg-gradient-to-br from-[#f9005b] via-[#9d00ff] to-[#ff0055] animate-gradient-xy tech-pattern-overlay rounded-3xl p-10 md:p-16 text-center shadow-[0_0_80px_rgba(249,0,91,0.6)] relative overflow-hidden transition-all duration-500 max-w-6xl mx-auto border border-white/20";
-            
-            ctaHeading.className = "text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-6 transform -skew-x-6 relative z-10 drop-shadow-2xl";
-            ctaHeading.style.fontFamily = 'Impact, sans-serif';
-            ctaHeading.innerText = "LET'S CREATE CHAOS";
-            
-            ctaDesc.className = "text-white font-bold mb-10 text-xl tracking-widest uppercase border-none bg-transparent p-0 shadow-none relative z-10 drop-shadow-md";
-            ctaDesc.innerText = "Lupakan aturan main. Kami bangun pengalaman digital radikal yang tak akan bisa diabaikan.";
-            
-            vibeBtn.className = "group relative inline-flex items-center justify-center bg-[#080815] text-[#f9005b] font-black text-2xl md:text-3xl px-12 py-6 overflow-hidden rounded-2xl transition-all hover:scale-110 shadow-[0_15px_30px_rgba(0,0,0,0.5)] border border-[#f9005b]/30 relative z-10";
-            vibeBtn.innerHTML = "<span class='absolute inset-0 w-[120%] h-full bg-[#f9005b] transform -translate-x-full skew-x-12 group-hover:translate-x-[-10%] transition-transform duration-500 ease-out'></span><span class='relative z-10 group-hover:text-black transition-colors duration-300'>I WANT THIS CHAOS</span>";
-        }
-    });
+            } else {
+                // State 3: DISRUPT / CHAOS (Orisinal)
+                vibeSection.style.backgroundColor = '#000000';
+                vibeSection.style.color = '#f9005b';
+                
+                vibeTitle.innerText = "PURE DISRUPTION.";
+                vibeTitle.style.fontFamily = 'Impact, sans-serif';
+                vibeTitle.style.transform = 'scale(1.2) rotate(-2deg)';
+                
+                if (ctaCard) ctaCard.className = "bg-gradient-to-br from-[#f9005b] via-[#9d00ff] to-[#ff0055] animate-gradient-xy tech-pattern-overlay rounded-3xl p-10 md:p-16 text-center shadow-[0_0_80px_rgba(249,0,91,0.6)] relative overflow-hidden transition-all duration-500 w-full max-w-6xl mx-auto mt-8 border border-white/20";
+                
+                if (ctaHeading) {
+                    ctaHeading.className = "text-5xl md:text-7xl font-black text-white uppercase tracking-tighter mb-6 transform -skew-x-6 relative z-10 drop-shadow-2xl";
+                    ctaHeading.style.fontFamily = 'Impact, sans-serif';
+                    ctaHeading.innerText = "LET'S CREATE CHAOS";
+                }
+                if (ctaDesc) {
+                    ctaDesc.className = "text-white font-bold mb-10 text-xl tracking-widest uppercase border-none bg-transparent p-0 shadow-none relative z-10 drop-shadow-md max-w-3xl mx-auto";
+                    ctaDesc.innerText = "Lupakan aturan main. Kami bangun pengalaman digital radikal yang tak akan bisa diabaikan.";
+                }
+                if (vibeBtn) {
+                    vibeBtn.className = "group relative inline-flex items-center justify-center bg-[#080815] text-[#f9005b] font-black text-2xl md:text-3xl px-12 py-6 overflow-hidden rounded-2xl transition-all hover:scale-110 shadow-[0_15px_30px_rgba(0,0,0,0.5)] border border-[#f9005b]/30 relative z-10";
+                    vibeBtn.innerHTML = "<span class='absolute inset-0 w-[120%] h-full bg-[#f9005b] transform -translate-x-full skew-x-12 group-hover:translate-x-[-10%] transition-transform duration-500 ease-out'></span><span class='relative z-10 group-hover:text-black transition-colors duration-300'>I WANT THIS CHAOS</span>";
+                }
+            }
+        });
+    }
 });

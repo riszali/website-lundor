@@ -117,7 +117,7 @@
             
             <!-- Kolom 1: Branding (Lebar 5 kolom di Desktop) -->
             <div class="md:col-span-5 footer-anim-item">
-                <img src="{{ asset('assets/images/logo-lundor-white.png') }}" alt="Lund'or Imagine Digital" class="h-10 md:h-14 w-auto mb-6 object-contain">
+                <img src="{{ asset('assets/images/logo-client/LOGOEsensee.png') }}" alt="Lund'or Imagine Digital" class="h-10 md:h-14 w-auto mb-6 object-contain">
                 <p class="text-gray-400 font-sans text-sm md:text-base leading-relaxed max-w-sm mb-6">
                     Desain standar sudah mati. Kami hadir untuk meretas batasan, meracik kekacauan digital, dan melahirkan mahakarya visual yang menolak untuk diabaikan.
                 </p>
@@ -181,7 +181,6 @@
     </div>
 </footer>
 
-<!-- Tambahkan script ini ke file JS Anda atau letakkan sebelum tag penutup body -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         // Mengatur tahun secara dinamis
