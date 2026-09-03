@@ -8,6 +8,33 @@
 
 <!-- CSS Khusus -->
 <style>
+    /* Compatibility Fixes untuk Safari WebKit Engine */
+    .bg-clip-text {
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+    }
+    .text-transparent {
+        -webkit-text-fill-color: transparent !important;
+    }
+    
+    /* Cross-browser Backdrop Blur untuk Safari */
+    .backdrop-blur-md {
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+    }
+    .backdrop-blur-xl {
+        -webkit-backdrop-filter: blur(24px);
+        backdrop-filter: blur(24px);
+    }
+    .backdrop-blur-2xl {
+        -webkit-backdrop-filter: blur(40px);
+        backdrop-filter: blur(40px);
+    }
+    .backdrop-blur-sm {
+        -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
+    }
+
     /* Typography & Utilities */
     .font-space { font-family: 'Space Grotesk', sans-serif; }
 
@@ -53,12 +80,16 @@
         }
     }
 
-    /* Optimasi Animasi GPU */
+    /* Optimasi Animasi GPU Safari & Modern Browser */
     .will-change-transform {
         will-change: transform;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform-style: preserve-3d;
+        transform-style: preserve-3d;
     }
 
-    /* 1. Glitch Effect CSS */
+    /* 1. Glitch Effect CSS Safari Safe */
     .glitch-wrapper {
         position: relative;
     }
@@ -79,12 +110,16 @@
         width: 100%;
         height: 100%;
         background: transparent;
-        will-change: clip;
+        will-change: clip, transform;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
     .glitch-text::before {
         left: 3px;
         text-shadow: -2px 0 #f9005b;
         clip: rect(24px, 550px, 90px, 0);
+        -webkit-clip-path: inset(24px 0 60px 0);
+        clip-path: inset(24px 0 60px 0);
         animation: glitch-anim 3s infinite linear alternate-reverse;
         z-index: -1;
     }
@@ -92,21 +127,24 @@
         left: -3px;
         text-shadow: -2px 0 #0ff;
         clip: rect(85px, 550px, 140px, 0);
+        -webkit-clip-path: inset(85px 0 10px 0);
+        clip-path: inset(85px 0 10px 0);
         animation: glitch-anim 2s infinite linear alternate-reverse;
         z-index: -2;
     }
     @keyframes glitch-anim {
-        0% { clip: rect(10px, 9999px, 83px, 0); }
-        20% { clip: rect(61px, 9999px, 34px, 0); }
-        40% { clip: rect(23px, 9999px, 98px, 0); }
-        60% { clip: rect(88px, 9999px, 12px, 0); }
-        80% { clip: rect(4px, 9999px, 76px, 0); }
-        100% { clip: rect(50px, 9999px, 30px, 0); }
+        0% { clip: rect(10px, 9999px, 83px, 0); -webkit-clip-path: inset(10px 0 60px 0); clip-path: inset(10px 0 60px 0); }
+        20% { clip: rect(61px, 9999px, 34px, 0); -webkit-clip-path: inset(61px 0 20px 0); clip-path: inset(61px 0 20px 0); }
+        40% { clip: rect(23px, 9999px, 98px, 0); -webkit-clip-path: inset(23px 0 40px 0); clip-path: inset(23px 0 40px 0); }
+        60% { clip: rect(88px, 9999px, 12px, 0); -webkit-clip-path: inset(88px 0 5px 0); clip-path: inset(88px 0 5px 0); }
+        80% { clip: rect(4px, 9999px, 76px, 0); -webkit-clip-path: inset(4px 0 30px 0); clip-path: inset(4px 0 30px 0); }
+        100% { clip: rect(50px, 9999px, 30px, 0); -webkit-clip-path: inset(50px 0 50px 0); clip-path: inset(50px 0 50px 0); }
     }
 
     /* 2. Vibe Configurator Advanced Slider Styling */
     .advanced-slider {
         -webkit-appearance: none;
+        appearance: none;
         width: 100%;
         height: 6px;
         background: transparent;
@@ -123,6 +161,7 @@
     }
     .advanced-slider::-webkit-slider-thumb {
         -webkit-appearance: none;
+        appearance: none;
         height: 36px;
         width: 24px;
         border-radius: 4px;
@@ -133,6 +172,7 @@
         border: 2px solid #f9005b;
         transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s, border-color 0.2s;
         position: relative;
+        background-image: -webkit-repeating-linear-gradient(left, transparent, transparent 2px, rgba(255,255,255,0.3) 2px, rgba(255,255,255,0.3) 4px);
         background-image: repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.3) 2px, rgba(255,255,255,0.3) 4px);
         background-position: center;
         background-size: 10px 10px;
@@ -141,23 +181,29 @@
     .advanced-slider:active::-webkit-slider-thumb {
         cursor: grabbing;
         transform: scale(1.1);
+        -webkit-transform: scale(1.1);
     }
     .advanced-slider:hover::-webkit-slider-thumb {
         box-shadow: 0 0 35px rgba(157, 0, 255, 0.9), inset 0 0 15px rgba(157,0,255,0.8);
         border-color: #9d00ff;
     }
 
-    /* 3. Slider Mekanisme Modern GSAP */
+    /* 3. Slider Mekanisme Modern GSAP Safari Optimized */
     .slider-viewport {
         overflow: hidden;
         width: 100%;
         padding: 20px 0;
+        -webkit-overflow-scrolling: touch;
     }
     .slider-track {
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
         gap: 24px;
         will-change: transform;
         transition: none; /* Dikelola oleh GSAP */
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
     .btn-nav-slider {
         width: 60px;
@@ -165,7 +211,10 @@
         border-radius: 50%;
         border: 1px solid rgba(255,255,255,0.1);
         background: rgba(255,255,255,0.05);
+        -webkit-backdrop-filter: blur(10px);
         backdrop-filter: blur(10px);
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -178,12 +227,14 @@
         background: #f9005b;
         border-color: #f9005b;
         transform: scale(1.1);
+        -webkit-transform: scale(1.1);
         box-shadow: 0 0 30px rgba(249,0,91,0.5);
     }
     .btn-nav-slider:disabled {
         opacity: 0.2;
         cursor: not-allowed;
         transform: scale(0.9);
+        -webkit-transform: scale(0.9);
     }
     /* Progress bar slider */
     .slider-progress-bg {
@@ -208,6 +259,8 @@
     /* 4. Tech Card Spotlight & Buttons */
     .slide-item {
         position: relative;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
     }
     .slide-item::before {
         content: "";
@@ -215,6 +268,7 @@
         inset: 0;
         z-index: 10;
         pointer-events: none;
+        background: -webkit-radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(249,0,91,0.15), transparent 40%);
         background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(249,0,91,0.15), transparent 40%);
         opacity: 0;
         transition: opacity 0.5s ease;
@@ -237,6 +291,7 @@
         content: '';
         position: absolute;
         inset: 0;
+        background-image: -webkit-radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
         background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
         background-size: 24px 24px;
         pointer-events: none;
@@ -255,14 +310,14 @@
         height: 100%;
     }
     .disable-selection {
+        -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
-        -khtml-user-select: none;
-        -webkit-user-select: none;
+        user-select: none;
         -webkit-touch-callout: none;
     }
 
-    /* 7. Marquee */
+    /* 7. Marquee Safari Fix */
     .marquee-wrapper {
         overflow: hidden;
         white-space: nowrap;
@@ -278,28 +333,36 @@
     }
     .marquee-wrapper::before {
         left: 0;
+        background: -webkit-linear-gradient(left, #080815 0%, transparent 100%);
         background: linear-gradient(to right, #080815 0%, transparent 100%);
     }
     .marquee-wrapper::after {
         right: 0;
+        background: -webkit-linear-gradient(right, #080815 0%, transparent 100%);
         background: linear-gradient(to left, #080815 0%, transparent 100%);
     }
     .marquee-content {
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
         display: inline-flex;
         animation: scroll-marquee 40s linear infinite;
+        width: -webkit-max-content;
         width: max-content;
+        will-change: transform;
     }
     .marquee-content:hover {
         animation-play-state: paused;
     }
     @keyframes scroll-marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
+        0% { transform: translate3d(0, 0, 0); -webkit-transform: translate3d(0, 0, 0); }
+        100% { transform: translate3d(-50%, 0, 0); -webkit-transform: translate3d(-50%, 0, 0); }
     }
     .client-brand {
         opacity: 0.3;
         transition: all 0.4s ease;
         cursor: pointer;
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -308,13 +371,14 @@
         opacity: 1;
         color: #f9005b;
         transform: scale(1.1);
+        -webkit-transform: scale(1.1);
         text-shadow: 0 0 20px rgba(249,0,91,0.6);
     }
 </style>
 
 <!-- SECTION 1: THE HOOK (Hero Section) -->
 <section id="hero-section" class="relative w-full h-screen overflow-hidden flex items-center justify-center bg-[#1a1a2e]">
-    <video id="hero-video" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-0 z-0">
+    <video id="hero-video" autoplay loop muted playsinline webkit-playsinline muted="muted" class="absolute inset-0 w-full h-full object-cover opacity-0 z-0">
         <source src="{{ asset('assets/video/3d-home-page.mp4') }}" type="video/mp4">
     </video>
     
@@ -345,7 +409,7 @@
     <div class="absolute inset-0 z-20 pointer-events-none flex items-center justify-center overflow-hidden">
         <img id="door-image" 
                 src="{{ asset('assets/images/fantasy-style-entryway-door-with-desert-landscape.png') }}" 
-                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop'; this.style.clipPath='polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 35% 25%, 35% 75%, 65% 75%, 65% 25%, 35% 25%)';"
+                onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop'; this.style.webkitClipPath='polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 35% 25%, 35% 75%, 65% 75%, 65% 25%, 35% 25%)'; this.style.clipPath='polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 35% 25%, 35% 75%, 65% 75%, 65% 25%, 35% 25%)';"
                 class="w-full h-full object-cover transform-gpu origin-center will-change-transform" 
                 alt="Entryway Door">
     </div>
@@ -800,14 +864,17 @@
 <!-- Script Keseluruhan -->
 <script src="{{ asset('js/home-main.js') }}"></script>
 
-<!-- Import Map Baru Khusus Untuk Scary Scene -->
+<!-- Polyfill ES Module Shims Khusus Safari agar mendukung importmap -->
+<script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+
+<!-- Import Map Baru Khusus Untuk Scary Scene & Astronaut -->
 <script type="importmap">
     {
         "imports": {
             "three": "https://cdn.jsdelivr.net/npm/three@0.164/build/three.module.js",
             "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164/examples/jsm/"
+        }
     }
-}
 </script>
 
 <script type="module" src="{{ asset('js/home-scary.js') }}"></script>
